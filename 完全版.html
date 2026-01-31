@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>絶頂快楽オナリズム - 極 -</title>
+    <title>絶頂快楽オナリズム - 極 - -</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&family=Yuji+Syuku&display=swap');
@@ -21,24 +21,26 @@
             overflow: hidden;
             font-family: 'M PLUS Rounded 1c', sans-serif;
             user-select: none;
-            touch-action: none;
+            -webkit-touch-callout: none; /* iOS長押しメニュー無効化 */
         }
 
-        /* UI BOX - ホバー演出を維持 */
+        /* レスポンシブ対応のUIボックス */
         .ui-box {
             background: #000;
-            border: 2px solid #fff;
+            border: 3px solid #fff;
             box-shadow: 4px 4px 0 var(--love-pink);
             color: #fff;
             font-weight: 900;
             text-transform: uppercase;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
         }
 
         @media (min-width: 768px) {
             .ui-box {
-                border-width: 3px;
                 box-shadow: 6px 6px 0 var(--love-pink);
             }
         }
@@ -66,34 +68,50 @@
             flex-direction: column;
             justify-content: space-around;
             overflow: hidden;
-            opacity: 0.5;
+            opacity: 0.6;
             font-family: 'Yuji Syuku', serif;
         }
 
         .stream-row {
             white-space: nowrap;
-            font-size: clamp(2rem, 8vw, 5rem);
+            /* スマホで大きすぎないように調整 */
+            font-size: clamp(2rem, 6vw, 5rem);
             font-weight: 900;
-            color: rgba(255, 255, 255, 0.15);
-            -webkit-text-stroke: 1px var(--love-pink);
-            text-shadow: 0 0 10px rgba(255, 0, 128, 0.4);
+            color: rgba(255, 255, 255, 0.2);
+            -webkit-text-stroke: 1.5px var(--love-pink);
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
         }
 
-        .to-right { animation: stream-right 25s linear infinite; }
-        .to-left { animation: stream-left 30s linear infinite; }
-        .to-right-slow { animation: stream-right 35s linear infinite; }
+        .to-right { animation: stream-right 20s linear infinite; }
+        .to-left { animation: stream-left 25s linear infinite; }
+        .to-right-slow { animation: stream-right 30s linear infinite; }
 
-        @keyframes stream-right { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-        @keyframes stream-left { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        @keyframes stream-right {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+        @keyframes stream-left {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
 
         #speed-lines {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle, transparent 30%, rgba(255, 0, 128, 0.2) 100%),
-                        repeating-conic-gradient(from 0deg, transparent 0deg 1deg, rgba(255, 0, 128, 0.15) 2deg 3deg);
+            background: radial-gradient(circle, transparent 30%, rgba(255, 0, 128, 0.3) 100%),
+                        repeating-conic-gradient(from 0deg, transparent 0deg 1deg, rgba(255, 0, 128, 0.2) 2deg 3deg);
             pointer-events: none;
             z-index: 50;
-            opacity: 0.6;
+            opacity: 0.7;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+        .line-hit-anim {
+            animation: line-pop 0.15s ease-out forwards;
+        }
+        @keyframes line-pop {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
         }
 
         #hud {
@@ -101,15 +119,27 @@
             inset: 0;
             z-index: 200;
             pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* ゲージ - デバイスサイズに合わせて調整 */
+        /* ゲージの位置とサイズをレスポンシブに */
         #gauge-wrapper {
             position: absolute;
-            left: 15px;
+            left: 20px;
             bottom: 5%;
-            width: clamp(40px, 8vw, 80px);
+            width: clamp(40px, 8vw, 100px); /* 幅を可変に */
             height: 60%;
+            z-index: 201;
+        }
+
+        @media (max-width: 600px) {
+            #gauge-wrapper {
+                left: 10px;
+                bottom: 2%;
+                height: 50%;
+            }
         }
 
         #gauge-outer {
@@ -117,9 +147,9 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             border: 4px solid #fff;
-            border-radius: 0 0 40px 40px;
+            border-radius: 0 0 50px 50px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255,0,128,0.4);
+            box-shadow: 0 0 30px rgba(255,0,128,0.4);
             position: relative;
         }
 
@@ -128,21 +158,40 @@
             bottom: 0;
             width: 100%;
             height: 0%;
-            background: linear-gradient(to top, #ffffff, #f6f6f6);
+            background: linear-gradient(to top, #ffffff, #f0f0f0);
             transition: height 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .wave-svg {
             position: absolute;
-            top: -15px;
+            top: -20px;
             width: 200%;
-            height: 30px;
-            fill: #f6f6f6;
+            height: 40px;
+            fill: #f0f0f0;
             animation: wave-move 2s linear infinite;
+            transition: opacity 0.5s ease;
         }
-        @keyframes wave-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes wave-move {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
 
-        /* コンボ表示 */
+        .overflow-drop {
+            position: absolute;
+            top: 0;
+            background: #fff;
+            width: 12px;
+            border-radius: 6px;
+            box-shadow: 0 0 8px #fff;
+            z-index: 10;
+            animation: spill-down 1.2s ease-in forwards;
+        }
+        @keyframes spill-down {
+            0% { transform: translateY(-10px); opacity: 1; height: 10px; }
+            100% { transform: translateY(400px); opacity: 0; height: 40px; }
+        }
+
+        /* コンボ表示の位置調整 */
         #combo-container {
             position: absolute;
             right: 5%;
@@ -150,68 +199,88 @@
             z-index: 1000;
             display: none;
             text-align: right;
+            pointer-events: none;
         }
+
+        @media (max-width: 768px) {
+            #combo-container {
+                right: 50%;
+                top: 25%;
+                transform: translateX(50%);
+                text-align: center;
+                width: 100%;
+            }
+        }
+
         #combo-num {
-            font-size: clamp(4rem, 15vw, 10rem);
+            font-size: clamp(5rem, 15vw, 10rem); /* フォントサイズ可変 */
             font-weight: 900;
             font-style: italic;
             color: #fff;
-            -webkit-text-stroke: 2px #000;
+            -webkit-text-stroke: clamp(2px, 0.5vw, 5px) #000;
             text-shadow: 6px 6px 0 var(--love-pink);
             line-height: 0.8;
             margin-bottom: 5px;
         }
+
         .combo-label {
             background: #000;
-            border: 2px solid #fff;
+            border: clamp(2px, 0.5vw, 4px) solid #fff;
             box-shadow: 4px 4px 0 var(--love-pink);
             padding: 5px 15px;
             color: var(--love-pink);
-            font-size: clamp(1.2rem, 4vw, 2.5rem);
+            font-size: clamp(1.5rem, 4vw, 3rem);
             font-weight: 900;
             font-style: italic;
+            display: inline-block;
         }
-        .pop-anim { animation: combo-pop 0.15s ease-out; }
-        @keyframes combo-pop { 
-            0% { transform: scale(0.8); } 
-            50% { transform: scale(1.2); } 
-            100% { transform: scale(1); } 
+
+        .pop-anim {
+            animation: combo-pop 0.15s ease-out;
+        }
+        @keyframes combo-pop {
+            0% { transform: scale(0.8) rotate(5deg); }
+            50% { transform: scale(1.3) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
         .interference {
             position: absolute;
-            border: 4px solid #fff;
-            box-shadow: 0 0 30px var(--love-pink);
+            border: 8px solid #fff;
+            box-shadow: 0 0 40px var(--love-pink);
             z-index: 400;
             pointer-events: none;
-            opacity: 0.8;
+            opacity: 0.85;
+            filter: contrast(1.2) saturate(1.5);
             animation: interference-in-out 1.8s ease-in-out forwards;
         }
         @keyframes interference-in-out {
-            0% { opacity: 0; transform: scale(0.5); }
-            15% { opacity: 0.8; transform: scale(1); }
-            85% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.1); }
+            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            15% { opacity: 0.85; transform: scale(1) rotate(0deg); }
+            85% { opacity: 0.85; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(1.2) rotate(10deg); }
         }
 
         #bg-image-layer {
             position: absolute;
             inset: 0;
             z-index: 1;
-            opacity: 0.3;
+            opacity: 0.4;
             background-size: cover;
             background-position: center;
-            animation: bg-aggressive 4s infinite alternate ease-in-out;
+            animation: bg-aggressive 2s infinite alternate ease-in-out;
         }
         @keyframes bg-aggressive {
-            0% { transform: scale(1); filter: brightness(1); }
-            100% { transform: scale(1.2) rotate(2deg); filter: brightness(1.2); }
+            0% { transform: scale(1) rotate(0deg) translate(0, 0); filter: hue-rotate(0deg) brightness(1); }
+            33% { transform: scale(1.4) rotate(4deg) translate(40px, -20px); filter: hue-rotate(20deg) brightness(1.2); }
+            66% { transform: scale(1.2) rotate(-4deg) translate(-40px, 30px); filter: hue-rotate(-20deg) brightness(1.1); }
+            100% { transform: scale(1.6) rotate(2deg) translate(10px, 10px); filter: hue-rotate(40deg) brightness(1.3); }
         }
 
         .onomatopee {
             position: absolute;
             font-family: 'Yuji Syuku', serif;
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(3rem, 10vw, 6rem); /* 可変サイズ */
             color: #fff;
             -webkit-text-stroke: 2px var(--love-pink);
             text-shadow: 4px 4px 0 #000;
@@ -220,87 +289,97 @@
             animation: onomato-float 0.7s ease-out forwards;
         }
         @keyframes onomato-float {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            40% { transform: translateY(-80px) scale(1.2); opacity: 1; }
-            100% { transform: translateY(-150px) scale(1); opacity: 0; }
+            0% { transform: translateY(0) scale(0.4) rotate(-20deg); opacity: 0; }
+            40% { transform: translateY(-100px) scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: translateY(-200px) scale(1) rotate(0); opacity: 0; }
         }
 
-        /* リザルト画面タイル - ホバー演出維持 */
         #result-tile-container {
             position: absolute;
-            inset: -200px;
+            inset: -400px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, clamp(100px, 20vw, 200px));
-            grid-auto-rows: clamp(100px, 20vw, 200px);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, 220px);
+            grid-auto-rows: 220px;
+            gap: 15px;
             z-index: 0;
             transform: rotate(-5deg);
-            animation: tiles-slide-oblique 100s linear infinite;
+            animation: tiles-slide-oblique 80s linear infinite;
         }
         @keyframes tiles-slide-oblique {
             from { transform: rotate(-5deg) translate(0, 0); }
-            to { transform: rotate(-5deg) translate(-400px, -200px); }
+            to { transform: rotate(-5deg) translate(-500px, -300px); }
         }
         .res-tile {
-            border: 3px solid #fff;
+            width: 220px; height: 220px;
+            border: 6px solid #fff;
             background-size: cover; background-position: center;
-            transition: all 0.4s ease;
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .res-tile:hover {
-            transform: scale(1.2) rotate(5deg);
+            transform: scale(1.25) rotate(5deg);
             z-index: 1000;
-            box-shadow: 0 0 30px var(--love-pink);
+            box-shadow: 0 0 40px var(--love-pink);
             border-color: var(--love-pink);
         }
 
         .drip-fluid {
             position: absolute;
             background: #fff;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 0 10px #fff;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 0 15px #fff;
             z-index: 3000;
             animation: drip-fall linear forwards;
         }
-        @keyframes drip-fall { from { transform: translateY(-100px); } to { transform: translateY(110vh); } }
+        @keyframes drip-fall {
+            from { transform: translateY(-100px); }
+            to { transform: translateY(110vh); }
+        }
 
-        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 100; cursor: pointer; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 100; cursor: pointer; touch-action: none; }
 
         #top-hud-layer {
             position: absolute; inset: 0;
             z-index: 20000;
             pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: clamp(10px, 3vw, 40px);
         }
         .pointer-auto { pointer-events: auto; }
 
         #fc-modal {
             position: absolute;
             left: 50%; top: 50%;
-            width: 90%;
-            max-width: 600px;
             transform: translate(-50%, -50%) scale(0);
             background: #000;
             border: 6px solid #fff;
             box-shadow: 10px 10px 0 var(--love-pink);
-            padding: 20px;
+            padding: clamp(20px, 5vw, 40px) clamp(30px, 8vw, 80px);
             z-index: 21000;
             text-align: center;
             pointer-events: none;
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: min(90%, 800px);
         }
         #fc-modal.active { transform: translate(-50%, -50%) scale(1); }
-
-        /* スクロールバー非表示 */
-        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
 <div id="bg-image-layer"></div>
 
+<!-- 流れるテキストレイヤー -->
 <div id="text-stream-layer">
-    <div class="stream-row to-right">もっと激しくして…♡ 壊れるまで中に出して…♡ 全部飲み込みたいの…♡ 止まらないで…♡</div>
-    <div class="stream-row to-left">中が熱くてとろけそう…♡ 逃がさないで…♡ 孕ませて…♡ ザーメンまみれにして…♡</div>
-    <div class="stream-row to-right-slow">一滴残らず搾り取ってあげる…♡ 私だけの種馬になって…♡ 絶頂の先へ連れて行って…♡</div>
+    <div class="stream-row to-right">
+        もっと激しくして…♡ 壊れるまで中に出して…♡ 全部飲み込みたいの…♡ 止まらないで…♡ 奥まで届いてるよ…♡
+    </div>
+    <div class="stream-row to-left">
+        中が熱くてとろけそう…♡ 逃がさないで…♡ 孕ませて…♡ ザーメンまみれにして…♡ 本能で交わりたいの…♡
+    </div>
+    <div class="stream-row to-right-slow">
+        一滴残らず搾り取ってあげる…♡ 私だけの種馬になって…♡ 絶頂の先へ連れて行って…♡ クチュクチュ鳴ってるよ…♡
+    </div>
 </div>
 
 <div id="speed-lines"></div>
@@ -308,6 +387,7 @@
 <canvas id="game-canvas"></canvas>
 
 <div id="hud" class="hidden">
+    <!-- ゲージコンテナ -->
     <div id="gauge-wrapper">
         <div id="gauge-outer">
             <div id="liquid">
@@ -317,6 +397,7 @@
             </div>
         </div>
     </div>
+    <!-- コンボコンテナ -->
     <div id="combo-container">
         <div id="combo-num">0</div>
         <div class="combo-label">イクぅっ！！</div>
@@ -324,55 +405,56 @@
 </div>
 
 <div id="fc-modal">
-    <div class="text-[clamp(3rem,10vw,6rem)] text-white italic font-black" style="-webkit-text-stroke: 2px var(--love-pink);">FULL COMBO!!</div>
-    <div class="text-[clamp(1rem,4vw,2rem)] text-pink-300 font-bold mt-2">「一滴ものこさず、全部イクッ...♡」</div>
+    <div class="text-6xl md:text-8xl lg:text-[8rem] text-white italic font-black leading-tight" style="-webkit-text-stroke: clamp(1px, 0.5vw, 4px) var(--love-pink);">FULL COMBO!!</div>
+    <div class="text-xl md:text-3xl lg:text-4xl text-pink-300 font-bold mt-4 break-keep">「一滴ものこさず、全部イクッ...♡」</div>
 </div>
 
-<div id="home-screen" class="absolute inset-0 z-[30000] bg-black/90 flex items-center justify-center p-4">
-    <div class="max-w-4xl w-full flex flex-col items-center">
-        <h1 class="text-[clamp(3.5rem,15vw,8rem)] font-black italic mb-8 title-shake text-center leading-tight" style="text-shadow: 6px 6px 0 var(--love-pink), -1px -1px 0 #fff;">
-            絶頂快楽<br><span class="text-[0.6em]">オナリズム</span>
+<div id="home-screen" class="absolute inset-0 z-[30000] bg-black/85 flex items-center justify-center p-4 md:p-10 overflow-y-auto">
+    <div class="max-w-5xl w-full flex flex-col items-center my-auto">
+        <h1 class="text-5xl md:text-8xl lg:text-[10rem] font-black italic mb-8 md:mb-16 title-shake text-center leading-none" style="text-shadow: 6px 6px 0 var(--love-pink), -3px -3px 0 #fff;">
+            絶頂快楽<br><span class="text-4xl md:text-6xl lg:text-8xl">オナリズム</span>
         </h1>
-        <div id="drop-zone" class="ui-box w-full p-6 md:p-10 flex flex-col items-center justify-center mb-8 border-2 border-dashed border-pink-500 hover:bg-pink-900/10 transition-colors cursor-pointer">
-            <span class="text-lg md:text-2xl font-bold mb-4 text-center">画像と楽曲を「注入」してください♡</span>
-            <div id="preview-area" class="flex flex-wrap gap-2 justify-center"></div>
+        <div id="drop-zone" class="ui-box w-full max-w-2xl p-6 md:p-12 flex flex-col items-center justify-center mb-8 md:mb-12 border-4 border-dashed border-pink-500 hover:bg-pink-900/10 transition-colors cursor-pointer group">
+            <span class="text-xl md:text-3xl font-bold mb-4 md:mb-6 text-center group-hover:scale-110 transition-transform">画像と楽曲を「注入」してください♡</span>
+            <div id="preview-area" class="flex flex-wrap gap-2 md:gap-4 justify-center"></div>
             <input type="file" id="file-input" multiple class="hidden">
         </div>
-        <button id="start-btn" class="ui-box text-3xl md:text-5xl px-12 py-4 md:px-20 md:py-6 opacity-30 cursor-not-allowed" disabled>
+        <button id="start-btn" class="ui-box text-3xl md:text-6xl px-12 md:px-24 py-4 md:py-8 opacity-30 cursor-not-allowed" disabled>
             準備OK♡
         </button>
     </div>
 </div>
 
+<!-- トップHUD: スコアとポーズ -->
 <div id="top-hud-layer" class="hidden">
-    <div class="absolute top-4 left-4 flex flex-col gap-2 pointer-auto">
-        <div class="ui-box text-lg md:text-3xl px-4 py-2">SCORE: <span id="score-val" class="font-mono">0000000</span></div>
-        <div class="ui-box text-sm md:text-xl px-4 py-1">MISS: <span id="miss-val" class="font-mono">0</span></div>
+    <div class="flex flex-col gap-2 md:gap-4 pointer-auto">
+        <div class="ui-box text-2xl md:text-4xl lg:text-5xl px-4 md:px-8 py-2 md:py-4">SCORE: <span id="score-val" class="font-mono ml-2">0000000</span></div>
+        <div class="ui-box text-lg md:text-2xl lg:text-3xl px-3 md:px-6 py-1 md:py-2">MISS: <span id="miss-val" class="font-mono ml-2">0</span></div>
     </div>
-    <button id="pause-btn" class="absolute top-4 right-4 ui-box text-sm md:text-xl px-4 py-2 pointer-auto">PAUSE</button>
+    <button id="pause-btn" class="ui-box text-xl md:text-3xl px-4 md:px-8 py-2 md:py-4 pointer-auto">PAUSE</button>
 </div>
 
-<div id="pause-menu" class="absolute inset-0 z-[40000] bg-black/95 hidden flex flex-col items-center justify-center gap-6 p-4">
-    <div class="ui-box text-4xl md:text-7xl px-8 py-4 mb-4 text-center">焦らさないで...♡</div>
-    <button id="resume-btn" class="ui-box text-2xl md:text-4xl w-full max-w-[300px] py-4">続ける</button>
-    <button id="restart-btn" class="ui-box text-2xl md:text-4xl w-full max-w-[300px] py-4">最初から</button>
-    <button id="home-btn" class="ui-box text-2xl md:text-4xl w-full max-w-[300px] py-4">ホームへ</button>
+<div id="pause-menu" class="absolute inset-0 z-[40000] bg-black/95 hidden flex flex-col items-center justify-center gap-6 md:gap-10 p-4">
+    <div class="ui-box text-4xl md:text-6xl lg:text-8xl px-8 md:px-12 py-4 md:py-6 mb-6 md:mb-10 text-center whitespace-normal">焦らさないで...♡</div>
+    <button id="resume-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">続ける</button>
+    <button id="restart-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">最初から</button>
+    <button id="home-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">ホームへ</button>
 </div>
 
 <div id="result-screen" class="absolute inset-0 z-[25000] bg-[#050005] hidden overflow-hidden">
     <div id="result-tile-container"></div>
-    <div class="relative z-10 w-full h-full flex flex-col items-center justify-center bg-black/60 p-4 pointer-events-none">
-        <div class="flex flex-col md:flex-row gap-6 md:gap-12 items-center mb-10 pointer-events-auto">
-            <div class="ui-box text-7xl md:text-[10rem] px-8 py-4" id="final-rank">S</div>
-            <div class="flex flex-col gap-3">
-                <div class="ui-box text-2xl md:text-4xl px-6 py-3">SCORE: <span id="res-score">0</span></div>
-                <div class="ui-box text-xl md:text-2xl px-6 py-2">MISS: <span id="res-miss">0</span></div>
+    <div class="relative z-10 w-full h-full flex flex-col items-center justify-center bg-black/50 pointer-events-none p-4">
+        <div class="flex flex-col md:flex-row gap-6 md:gap-12 items-center mb-8 md:mb-16 pointer-events-auto">
+            <div class="ui-box text-[6rem] md:text-[10rem] lg:text-[12rem] px-8 md:px-16 py-4 md:py-8" id="final-rank">S</div>
+            <div class="flex flex-col gap-2 md:gap-4 w-full md:w-auto">
+                <div class="ui-box text-2xl md:text-4xl lg:text-5xl px-6 md:px-10 py-2 md:py-4 justify-between md:justify-center">SCORE: <span id="res-score" class="ml-4">0</span></div>
+                <div class="ui-box text-xl md:text-2xl lg:text-3xl px-6 md:px-10 py-2 justify-between md:justify-center">MISS: <span id="res-miss" class="ml-4">0</span></div>
             </div>
         </div>
-        <div class="ui-box text-lg md:text-3xl italic text-pink-300 px-6 py-4 mb-10 text-center max-w-2xl pointer-events-auto" id="res-comment">「最高に気持ちよかったよ...」</div>
-        <div class="flex flex-col md:flex-row gap-4 pointer-events-auto w-full max-w-md md:max-w-none px-10">
-            <button onclick="restartGame()" class="ui-box text-xl md:text-3xl px-8 py-4 flex-1">もう一度イク</button>
-            <button onclick="goHome()" class="ui-box text-xl md:text-3xl px-8 py-4 flex-1">ホームに戻る</button>
+        <div class="ui-box text-lg md:text-3xl lg:text-4xl italic text-pink-300 px-6 md:px-12 py-4 md:py-6 mb-10 md:mb-20 text-center max-w-4xl pointer-events-auto whitespace-normal leading-relaxed" id="res-comment">「最高に気持ちよかったよ...」</div>
+        <div class="flex flex-col md:flex-row gap-4 md:gap-10 pointer-events-auto w-full max-w-2xl md:max-w-none items-center justify-center">
+            <button onclick="restartGame()" class="ui-box text-xl md:text-4xl px-8 md:px-16 py-4 md:py-6 w-full md:w-auto">もう一度イク</button>
+            <button onclick="goHome()" class="ui-box text-xl md:text-4xl px-8 md:px-16 py-4 md:py-6 w-full md:w-auto">ホームに戻る</button>
         </div>
     </div>
 </div>
@@ -387,6 +469,7 @@
     const pauseBtn = document.getElementById('pause-btn');
     const liquid = document.getElementById('liquid');
     const waveSvg = document.getElementById('wave-svg');
+    const gaugeOuter = document.getElementById('gauge-outer');
     const gaugeWrapper = document.getElementById('gauge-wrapper');
     const fcModal = document.getElementById('fc-modal');
 
@@ -399,9 +482,9 @@
     let lastBgUpdate = 0;
 
     const LANE_COUNT = 4;
-    const NOTE_SPEED = 7.5; // 少しマイルドに
-    const JUDGE_Y = 0.85;
-    let noteRadius = 50;
+    const NOTE_SPEED = 8.5;
+    const JUDGE_Y = 0.88;
+    const NOTE_RADIUS = 70;
 
     dropZone.onclick = () => fileInput.click();
     fileInput.onchange = async (e) => {
@@ -415,7 +498,7 @@
                 img.src = URL.createObjectURL(file);
                 images.push(img);
                 const prev = document.createElement('div');
-                prev.className = "w-12 h-12 border border-white bg-cover bg-center";
+                prev.className = "w-12 h-12 md:w-20 md:h-20 border-2 border-white bg-cover bg-center";
                 prev.style.backgroundImage = `url(${img.src})`;
                 previewArea.appendChild(prev);
             }
@@ -430,16 +513,15 @@
     };
 
     function playHitSound(lane) {
-        if(!audioCtx) return;
         const t = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.frequency.setValueAtTime(140 + lane * 40, t);
-        osc.frequency.exponentialRampToValueAtTime(40, t + 0.1);
-        gain.gain.setValueAtTime(0.2, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+        osc.frequency.setValueAtTime(150 + lane * 50, t);
+        osc.frequency.exponentialRampToValueAtTime(40, t + 0.15);
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(t + 0.15);
+        osc.start(); osc.stop(t + 0.2);
     }
 
     function initGame() {
@@ -451,8 +533,8 @@
         score = 0; combo = 0; missCount = 0; notes = [];
         updateUI();
         const duration = musicBuffer.duration;
-        for (let t = 2.0; t < duration - 2.0; t += 0.5) {
-            if (Math.random() > 0.15) notes.push({ time: t, lane: Math.floor(Math.random() * 4), hit: false });
+        for (let t = 2.0; t < duration - 2.0; t += 0.45) {
+            if (Math.random() > 0.1) notes.push({ time: t, lane: Math.floor(Math.random() * 4), hit: false });
         }
         startMusic(0);
         gameActive = true;
@@ -477,65 +559,61 @@
         drawLanes();
         drawNotes(now);
         updateBackground(time);
-        if (combo >= 15 && Math.random() < 0.02) spawnInterference();
+        if (combo >= 10 && Math.random() < 0.03) spawnInterference();
         requestAnimationFrame(gameLoop);
     }
 
     function drawLanes() {
         const laneW = canvas.width / LANE_COUNT;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 4;
         for (let i = 1; i < LANE_COUNT; i++) {
             ctx.beginPath(); ctx.moveTo(i * laneW, 0); ctx.lineTo(i * laneW, canvas.height); ctx.stroke();
         }
         ctx.fillStyle = "#fff";
-        ctx.shadowBlur = 15; ctx.shadowColor = "var(--love-pink)";
-        ctx.fillRect(0, canvas.height * JUDGE_Y, canvas.width, 6);
+        ctx.shadowBlur = 25; ctx.shadowColor = "var(--love-pink)";
+        ctx.fillRect(0, canvas.height * JUDGE_Y, canvas.width, 12);
         ctx.shadowBlur = 0;
     }
 
     function drawNotes(now) {
         const laneW = canvas.width / LANE_COUNT;
         const judgeY = canvas.height * JUDGE_Y;
-        const pixelsPerSecond = canvas.height * 0.8; 
+        // 画面幅に応じてノートサイズを調整
+        const currentRadius = Math.min(NOTE_RADIUS, laneW * 0.4);
 
         notes.forEach(n => {
             if (n.hit) return;
-            const y = judgeY - (n.time - now) * NOTE_SPEED * (canvas.height / 10);
-            if (y > canvas.height + 100) { n.hit = true; miss(); return; }
-            if (y < -100) return;
-
+            const y = judgeY - (n.time - now) * NOTE_SPEED * 115;
+            if (y > canvas.height + 200) { n.hit = true; miss(); return; }
             const x = (n.lane + 0.5) * laneW;
             const img = images[n.lane % images.length];
-            
             ctx.save();
             ctx.translate(x, y);
-            ctx.beginPath(); ctx.arc(0, 0, noteRadius + 4, 0, Math.PI * 2);
-            ctx.fillStyle = "#fff"; ctx.shadowBlur = 10; ctx.shadowColor = "var(--love-pink)"; ctx.fill();
-            ctx.beginPath(); ctx.arc(0, 0, noteRadius, 0, Math.PI * 2); ctx.clip();
-            const s = Math.max(noteRadius*2 / img.width, noteRadius*2 / img.height);
+            ctx.beginPath(); ctx.arc(0, 0, currentRadius + 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff"; ctx.shadowBlur = 20; ctx.shadowColor = "var(--love-pink)"; ctx.fill();
+            ctx.beginPath(); ctx.arc(0, 0, currentRadius, 0, Math.PI * 2); ctx.clip();
+            const s = Math.max(currentRadius*2 / img.width, currentRadius*2 / img.height);
             ctx.drawImage(img, -img.width*s/2, -img.height*s/2, img.width*s, img.height*s);
             ctx.restore();
         });
     }
 
     function updateBackground(time) {
-        if (time - lastBgUpdate > 4000) {
+        if (time - lastBgUpdate > 3000) {
             const bg = document.getElementById('bg-image-layer');
-            if(images.length > 0) {
-                bg.style.backgroundImage = `url(${images[Math.floor(Math.random() * images.length)].src})`;
-            }
+            bg.style.backgroundImage = `url(${images[Math.floor(Math.random() * images.length)].src})`;
             lastBgUpdate = time;
         }
     }
 
     function spawnInterference() {
-        if(images.length === 0) return;
         const img = images[Math.floor(Math.random() * images.length)];
         const el = document.createElement('div');
         el.className = 'interference';
-        const width = Math.min(window.innerWidth * 0.6, 300);
-        const height = width * (img.height / img.width);
+        const ratio = img.width / img.height;
+        const width = 350 + Math.random() * 300;
+        const height = width / ratio;
         el.style.width = width + 'px'; el.style.height = height + 'px';
         el.style.left = Math.random() * (window.innerWidth - width) + 'px';
         el.style.top = Math.random() * (window.innerHeight - height) + 'px';
@@ -544,24 +622,33 @@
         setTimeout(() => el.remove(), 1800);
     }
 
-    const inputStart = (e) => {
-        const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-        const lane = Math.floor(x / (canvas.width / LANE_COUNT));
+    // Touch Support Added Here
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent scrolling
+        for (let i = 0; i < e.changedTouches.length; i++) {
+            const t = e.changedTouches[i];
+            const lane = Math.floor(t.clientX / (canvas.width / LANE_COUNT));
+            handleInput(lane);
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('mousedown', (e) => {
+        const lane = Math.floor(e.clientX / (canvas.width / LANE_COUNT));
         handleInput(lane);
-    };
-    canvas.addEventListener('mousedown', inputStart);
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); inputStart(e); });
+    });
 
     function handleInput(lane) {
         if (!gameActive || isPaused) return;
         const now = audioCtx.currentTime - startTime;
-        const noteIndex = notes.findIndex(n => !n.hit && n.lane === lane && Math.abs(n.time - now) < 0.2);
+        const noteIndex = notes.findIndex(n => !n.hit && n.lane === lane && Math.abs(n.time - now) < 0.22);
         if (noteIndex !== -1) { notes[noteIndex].hit = true; hit(lane); }
     }
 
     function hit(lane) {
-        combo++; score += 1000 + combo * 100;
+        combo++; score += 1000 + combo * 150;
         playHitSound(lane); spawnOnomatopee(lane);
+        const sl = document.getElementById('speed-lines');
+        sl.classList.remove('line-hit-anim'); void sl.offsetWidth; sl.classList.add('line-hit-anim');
         updateUI();
     }
 
@@ -576,16 +663,16 @@
             const num = document.getElementById('combo-num');
             num.innerText = combo; num.classList.remove('pop-anim'); void num.offsetWidth; num.classList.add('pop-anim');
         } else { comboContainer.style.display = 'none'; }
-        liquid.style.height = Math.min(100, (combo / 30) * 100) + '%';
+        liquid.style.height = Math.min(100, (combo / 40) * 100) + '%';
     }
 
     function spawnOnomatopee(lane) {
-        const words = ["ビチャッ！", "クチュ...！", "アッ♡", "んぉっ！", "イッ...！"];
+        const words = ["ビチャッ！", "クチュ...！", "アッ♡", "んぉっ！", "イッ...！", "ハァッハァッ！"];
         const el = document.createElement('div');
         el.className = 'onomatopee';
         el.innerText = words[Math.floor(Math.random() * words.length)];
-        el.style.left = (lane * 25 + 5) + '%';
-        el.style.top = '65%';
+        el.style.left = (lane * 25 + 5 + Math.random() * 5) + '%';
+        el.style.top = '70%';
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 700);
     }
@@ -593,25 +680,38 @@
     function triggerEndFlow() {
         gameActive = false;
         waveSvg.style.opacity = "0";
+
         if (missCount === 0 && score > 0) {
             fcModal.classList.add('active');
             liquid.style.transition = "height 2s ease-out";
             liquid.style.height = "100%";
-            
-            // 溢れ出し演出
-            for (let i = 0; i < 30; i++) {
+
+            setTimeout(() => {
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(() => {
+                        const drop = document.createElement('div');
+                        drop.className = 'overflow-drop';
+                        drop.style.left = (Math.random() * 80 + 10) + 'px';
+                        drop.style.width = (8 + Math.random() * 8) + 'px';
+                        gaugeWrapper.appendChild(drop);
+                        setTimeout(() => drop.remove(), 1200);
+                    }, i * 80);
+                }
+            }, 1000);
+
+            for(let i=0; i<80; i++) {
                 setTimeout(() => {
                     const d = document.createElement('div');
                     d.className = 'drip-fluid';
                     d.style.left = Math.random() * 100 + 'vw';
-                    d.style.width = (10 + Math.random() * 20) + 'px';
-                    d.style.height = (80 + Math.random() * 100) + 'px';
-                    d.style.animationDuration = (0.7 + Math.random() * 0.5) + 's';
+                    d.style.width = (15 + Math.random() * 30) + 'px';
+                    d.style.height = (100 + Math.random() * 150) + 'px';
+                    d.style.animationDuration = (0.6 + Math.random() * 0.8) + 's';
                     document.body.appendChild(d);
-                    setTimeout(() => d.remove(), 1200);
-                }, i * 50);
+                    setTimeout(() => d.remove(), 1500);
+                }, i * 35);
             }
-            setTimeout(showResults, 4000);
+            setTimeout(showResults, 5000);
         } else {
             showResults();
         }
@@ -625,14 +725,12 @@
         screen.style.display = 'block';
         document.getElementById('res-score').innerText = score.toLocaleString();
         document.getElementById('res-miss').innerText = missCount;
-        const rank = score > 1000000 ? "SSS" : score > 600000 ? "S" : score > 300000 ? "A" : "B";
+        const rank = score > 1500000 ? "SSS" : score > 800000 ? "S" : score > 400000 ? "A" : "B";
         document.getElementById('final-rank').innerText = rank;
         if (missCount === 0) document.getElementById('res-comment').innerText = "「凄かった...一滴ものこさず、全部受け止めたよ...♡」";
-        
         const tiles = document.getElementById('result-tile-container');
         tiles.innerHTML = '';
-        const count = window.innerWidth < 768 ? 60 : 120;
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < 150; i++) {
             const t = document.createElement('div');
             t.className = 'res-tile';
             t.style.backgroundImage = `url(${images[i % images.length].src})`;
@@ -671,19 +769,15 @@
     document.getElementById('home-btn').onclick = goHome;
 
     window.onkeydown = (e) => {
-        const mapping = { 'd': 0, 'f': 1, 'j': 2, 'k': 3, 's':0, 'a':0, 'l':3, ';':3 };
+        const mapping = { 'd': 0, 'f': 1, 'j': 2, 'k': 3 };
         const lane = mapping[e.key.toLowerCase()];
         if (lane !== undefined) handleInput(lane);
     };
 
-    function resize() { 
-        canvas.width = window.innerWidth; 
-        canvas.height = window.innerHeight; 
-        noteRadius = Math.min(window.innerWidth / 10, 60);
-    }
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     window.onresize = resize;
     startBtn.onclick = initGame;
-    resize();
 </script>
 </body>
+
 </html>

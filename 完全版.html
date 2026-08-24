@@ -3,781 +3,1585 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>絶頂快楽オナリズム - 極 - -</title>
+    <title>Ero Museum</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&family=Yuji+Syuku&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&display=swap');
 
         :root {
-            --love-pink: #ff0080;
-            --neon-white: #ffffff;
+            --theme-bg: #130307;
+            --theme-primary: #ff4081;
+            --theme-dark: #6a0b31;
+            --theme-light: #ff80ab;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: #050005;
-            color: #fff;
+        body {
+            font-family: 'Zen Antique Soft', serif;
+            background-color: var(--theme-bg);
+            color: var(--theme-light);
             overflow: hidden;
-            font-family: 'M PLUS Rounded 1c', sans-serif;
             user-select: none;
-            -webkit-touch-callout: none; /* iOS長押しメニュー無効化 */
+            -webkit-user-select: none;
+            touch-action: none;
         }
 
-        /* レスポンシブ対応のUIボックス */
-        .ui-box {
-            background: #000;
-            border: 3px solid #fff;
-            box-shadow: 4px 4px 0 var(--love-pink);
-            color: #fff;
-            font-weight: 900;
-            text-transform: uppercase;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: inline-flex;
+        /* --- UI Components --- */
+        .btn-erotic {
+            background: linear-gradient(145deg, #2d0a15, #150308);
+            border: 1px solid var(--theme-dark);
+            box-shadow: 2px 2px 5px #000, -1px -1px 2px #350d1a;
+            color: var(--theme-light);
+            transition: all 0.1s ease;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             justify-content: center;
-            white-space: nowrap;
-        }
-
-        @media (min-width: 768px) {
-            .ui-box {
-                box-shadow: 6px 6px 0 var(--love-pink);
-            }
-        }
-
-        .ui-box:hover:not(:disabled) {
-            transform: scale(1.05) rotate(3deg);
-            box-shadow: 8px 8px 0 var(--love-pink);
-            cursor: pointer;
-        }
-
-        .title-shake {
-            animation: soft-shake 3s ease-in-out infinite;
-        }
-        @keyframes soft-shake {
-            0%, 100% { transform: rotate(-1.5deg) scale(1); }
-            50% { transform: rotate(1.5deg) scale(1.02); }
-        }
-
-        #text-stream-layer {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            overflow: hidden;
-            opacity: 0.6;
-            font-family: 'Yuji Syuku', serif;
-        }
-
-        .stream-row {
-            white-space: nowrap;
-            /* スマホで大きすぎないように調整 */
-            font-size: clamp(2rem, 6vw, 5rem);
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.2);
-            -webkit-text-stroke: 1.5px var(--love-pink);
-            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
-        }
-
-        .to-right { animation: stream-right 20s linear infinite; }
-        .to-left { animation: stream-left 25s linear infinite; }
-        .to-right-slow { animation: stream-right 30s linear infinite; }
-
-        @keyframes stream-right {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(100%); }
-        }
-        @keyframes stream-left {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-
-        #speed-lines {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, transparent 30%, rgba(255, 0, 128, 0.3) 100%),
-                        repeating-conic-gradient(from 0deg, transparent 0deg 1deg, rgba(255, 0, 128, 0.2) 2deg 3deg);
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.7;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-        }
-        .line-hit-anim {
-            animation: line-pop 0.15s ease-out forwards;
-        }
-        @keyframes line-pop {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.7; }
-        }
-
-        #hud {
-            position: absolute;
-            inset: 0;
-            z-index: 200;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* ゲージの位置とサイズをレスポンシブに */
-        #gauge-wrapper {
-            position: absolute;
-            left: 20px;
-            bottom: 5%;
-            width: clamp(40px, 8vw, 100px); /* 幅を可変に */
-            height: 60%;
-            z-index: 201;
-        }
-
-        @media (max-width: 600px) {
-            #gauge-wrapper {
-                left: 10px;
-                bottom: 2%;
-                height: 50%;
-            }
-        }
-
-        #gauge-outer {
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 4px solid #fff;
-            border-radius: 0 0 50px 50px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(255,0,128,0.4);
             position: relative;
+            z-index: 50;
         }
 
-        #liquid {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 0%;
-            background: linear-gradient(to top, #ffffff, #f0f0f0);
-            transition: height 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .btn-erotic:hover:not(.active) {
+            box-shadow: 0 0 8px var(--theme-primary);
+            text-shadow: 0 0 5px var(--theme-primary);
         }
 
-        .wave-svg {
-            position: absolute;
-            top: -20px;
-            width: 200%;
-            height: 40px;
-            fill: #f0f0f0;
-            animation: wave-move 2s linear infinite;
-            transition: opacity 0.5s ease;
-        }
-        @keyframes wave-move {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-
-        .overflow-drop {
-            position: absolute;
-            top: 0;
-            background: #fff;
-            width: 12px;
-            border-radius: 6px;
-            box-shadow: 0 0 8px #fff;
-            z-index: 10;
-            animation: spill-down 1.2s ease-in forwards;
-        }
-        @keyframes spill-down {
-            0% { transform: translateY(-10px); opacity: 1; height: 10px; }
-            100% { transform: translateY(400px); opacity: 0; height: 40px; }
-        }
-
-        /* コンボ表示の位置調整 */
-        #combo-container {
-            position: absolute;
-            right: 5%;
-            top: 40%;
-            z-index: 1000;
-            display: none;
-            text-align: right;
-            pointer-events: none;
-        }
-
-        @media (max-width: 768px) {
-            #combo-container {
-                right: 50%;
-                top: 25%;
-                transform: translateX(50%);
-                text-align: center;
-                width: 100%;
-            }
-        }
-
-        #combo-num {
-            font-size: clamp(5rem, 15vw, 10rem); /* フォントサイズ可変 */
-            font-weight: 900;
-            font-style: italic;
+        .btn-erotic:active, .btn-erotic.active {
+            background: #0f0205;
+            box-shadow: inset 3px 3px 6px #000, inset -1px -1px 3px #2a0a12;
+            transform: translateY(1px);
+            border-color: var(--theme-primary);
             color: #fff;
-            -webkit-text-stroke: clamp(2px, 0.5vw, 5px) #000;
-            text-shadow: 6px 6px 0 var(--love-pink);
-            line-height: 0.8;
-            margin-bottom: 5px;
         }
 
-        .combo-label {
-            background: #000;
-            border: clamp(2px, 0.5vw, 4px) solid #fff;
-            box-shadow: 4px 4px 0 var(--love-pink);
-            padding: 5px 15px;
-            color: var(--love-pink);
-            font-size: clamp(1.5rem, 4vw, 3rem);
-            font-weight: 900;
-            font-style: italic;
-            display: inline-block;
-        }
-
-        .pop-anim {
-            animation: combo-pop 0.15s ease-out;
-        }
-        @keyframes combo-pop {
-            0% { transform: scale(0.8) rotate(5deg); }
-            50% { transform: scale(1.3) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        .interference {
+        .screen {
             position: absolute;
-            border: 8px solid #fff;
-            box-shadow: 0 0 40px var(--love-pink);
-            z-index: 400;
-            pointer-events: none;
-            opacity: 0.85;
-            filter: contrast(1.2) saturate(1.5);
-            animation: interference-in-out 1.8s ease-in-out forwards;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: none; z-index: 10;
         }
-        @keyframes interference-in-out {
-            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-            15% { opacity: 0.85; transform: scale(1) rotate(0deg); }
-            85% { opacity: 0.85; transform: scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: scale(1.2) rotate(10deg); }
-        }
+        .screen.visible { display: flex; flex-direction: column; }
 
-        #bg-image-layer {
+        .canvas-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        .art-object {
             position: absolute;
-            inset: 0;
-            z-index: 1;
-            opacity: 0.4;
-            background-size: cover;
+            background-repeat: no-repeat;
             background-position: center;
-            animation: bg-aggressive 2s infinite alternate ease-in-out;
-        }
-        @keyframes bg-aggressive {
-            0% { transform: scale(1) rotate(0deg) translate(0, 0); filter: hue-rotate(0deg) brightness(1); }
-            33% { transform: scale(1.4) rotate(4deg) translate(40px, -20px); filter: hue-rotate(20deg) brightness(1.2); }
-            66% { transform: scale(1.2) rotate(-4deg) translate(-40px, 30px); filter: hue-rotate(-20deg) brightness(1.1); }
-            100% { transform: scale(1.6) rotate(2deg) translate(10px, 10px); filter: hue-rotate(40deg) brightness(1.3); }
+            background-size: 100% 100%;
+            pointer-events: auto;
+            transition: filter 0.3s;
+            cursor: inherit;
         }
 
-        .onomatopee {
+        .art-object.locked::before {
+            content: '\f023';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
             position: absolute;
-            font-family: 'Yuji Syuku', serif;
-            font-size: clamp(3rem, 10vw, 6rem); /* 可変サイズ */
-            color: #fff;
-            -webkit-text-stroke: 2px var(--love-pink);
-            text-shadow: 4px 4px 0 #000;
+            bottom: 5px;
+            left: 5px;
+            color: var(--theme-primary);
+            font-size: 14px;
+            z-index: 10;
+            text-shadow: 0 0 4px #000;
+        }
+
+        /* Custom Cursors */
+        .cursor-pick { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23ff4081"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 3-2.74 3-2.74.53-.53 1.39-.53 1.91 0 .53.53.53 1.39 0 1.91l-4.5 4.5c-.75.75-1.8 1.13-2.88 1.05-1.55-.12-2.9-1.07-3.66-2.43L6.15 10.7c-.36-.62-.15-1.41.47-1.77.62-.36 1.41-.15 1.77.47l.61 1.06V11.24z"/></svg>') 16 16, auto !important; }
+        .cursor-lock { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23ff4081"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>') 16 16, auto !important; }
+        .cursor-pop { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512" fill="%23ff4081"><path d="M448 88.5C405 50.8 340.9 44.2 288 71.9l-22.3 11.6c-5.9 3.1-13.4 3.1-19.3 0L224 71.9C171.1 44.2 107 50.8 64 88.5 17.6 129.5 0 187.9 0 248c0 36.3 11.8 70.4 33.3 98.4l198 215.1c11.9 12.9 31.6 12.9 43.5 0l198-215.1c21.5-28 33.3-62.1 33.3-98.4 0-60.1-17.6-118.5-64-159.5zm-59.5 220l-123 133.7c-4.8 5.2-12.7 5.2-17.5 0L125 308.5c-14.8-19.2-22.7-42.5-22.7-66.5 0-40.4 12-80 43.3-107.5 28.5-25 68.8-29.4 104-11l14.7 7.7 15.6-36.5c3.2-7.5 13.7-8.1 17.8-.9l35 61.2c2.4 4.2 1.3 9.6-2.5 12.6l-38.3 30.7c-5.7 4.6-14-1.1-11.4-8L294 157.6l-20-35-18.1 42.1c-2.4 5.6-7.8 9.2-13.9 9.2H216c-6.6 0-12-5.4-12-12s5.4-12 12-12h17.1l11.4-26.6c-17.5-8.2-37.4-8.8-55.5-1.5-27.1 11-46 36.4-46 66.2 0 17.1 5.4 33.7 15.5 46.8L256 362l97.5-106c10.1-13.1 15.5-29.7 15.5-46.8 0-29.8-18.9-55.2-46-66.2-6.5-2.6-13.4-4.2-20.4-4.6l5.7-27.3c42.1 4.5 80.6 28.1 100 66.2 10.4 20.3 15.7 43 15.7 65.7 0 24-7.9 47.3-22.7 66.5z"/></svg>') 16 16, auto !important; }
+        .cursor-solo { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23ff4081"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>') 16 16, auto !important; }
+
+        .ero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            mix-blend-mode: color-burn;
             pointer-events: none;
-            z-index: 600;
-            animation: onomato-float 0.7s ease-out forwards;
-        }
-        @keyframes onomato-float {
-            0% { transform: translateY(0) scale(0.4) rotate(-20deg); opacity: 0; }
-            40% { transform: translateY(-100px) scale(1.3) rotate(10deg); opacity: 1; }
-            100% { transform: translateY(-200px) scale(1) rotate(0); opacity: 0; }
+            z-index: 2;
         }
 
-        #result-tile-container {
+        .range-container { position: relative; width: 100%; height: 24px; }
+        .range-container input[type=range] {
             position: absolute;
-            inset: -400px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 220px);
-            grid-auto-rows: 220px;
-            gap: 15px;
-            z-index: 0;
-            transform: rotate(-5deg);
-            animation: tiles-slide-oblique 80s linear infinite;
-        }
-        @keyframes tiles-slide-oblique {
-            from { transform: rotate(-5deg) translate(0, 0); }
-            to { transform: rotate(-5deg) translate(-500px, -300px); }
-        }
-        .res-tile {
-            width: 220px; height: 220px;
-            border: 6px solid #fff;
-            background-size: cover; background-position: center;
-            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        .res-tile:hover {
-            transform: scale(1.25) rotate(5deg);
-            z-index: 1000;
-            box-shadow: 0 0 40px var(--love-pink);
-            border-color: var(--love-pink);
-        }
-
-        .drip-fluid {
-            position: absolute;
-            background: #fff;
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 0 15px #fff;
-            z-index: 3000;
-            animation: drip-fall linear forwards;
-        }
-        @keyframes drip-fall {
-            from { transform: translateY(-100px); }
-            to { transform: translateY(110vh); }
-        }
-
-        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 100; cursor: pointer; touch-action: none; }
-
-        #top-hud-layer {
-            position: absolute; inset: 0;
-            z-index: 20000;
+            width: 100%;
             pointer-events: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: clamp(10px, 3vw, 40px);
+            appearance: none;
+            background: none;
+            z-index: 10;
         }
-        .pointer-auto { pointer-events: auto; }
-
-        #fc-modal {
+        .range-container input[type=range]::-webkit-slider-thumb {
+            pointer-events: auto;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            box-shadow: 0 0 5px #000;
+        }
+        .range-track {
             position: absolute;
-            left: 50%; top: 50%;
-            transform: translate(-50%, -50%) scale(0);
+            top: 10px;
+            width: 100%;
+            height: 4px;
+            background: #330c1a;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .shrapnel {
+            position: fixed;
+            pointer-events: none;
+            background-size: cover;
+            z-index: 9998;
+            animation: shrapnel-anim 0.8s ease-out forwards;
+        }
+        @keyframes shrapnel-anim {
+            to { transform: translate(var(--tw-x), var(--tw-y)) rotate(var(--tw-r)) scale(0); opacity: 0; }
+        }
+
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: particle-anim 0.6s ease-out forwards;
+        }
+        @keyframes particle-anim {
+            to { transform: translate(var(--tw-x), var(--tw-y)) scale(0); opacity: 0; }
+        }
+
+        .counter-board {
             background: #000;
-            border: 6px solid #fff;
-            box-shadow: 10px 10px 0 var(--love-pink);
-            padding: clamp(20px, 5vw, 40px) clamp(30px, 8vw, 80px);
-            z-index: 21000;
-            text-align: center;
-            pointer-events: none;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: min(90%, 800px);
+            border: 2px solid var(--theme-dark);
+            color: var(--theme-primary);
+            font-family: monospace;
+            text-shadow: 0 0 5px var(--theme-primary);
         }
-        #fc-modal.active { transform: translate(-50%, -50%) scale(1); }
+
+        /* --- Frames --- */
+        .frame-none { border: none; }
+        .frame-rose { border: 6px solid #ff4081; box-shadow: inset 0 0 5px #000; }
+        .frame-gold { border: 10px double #d4af37; }
+        .frame-silk { border: 8px solid #4a0f20; }
+        .frame-neon { border: 4px solid #ff00ff; box-shadow: 0 0 15px #ff00ff; }
+        .frame-wood { border: 12px solid #2b1108; }
+
+        /* --- Filters --- */
+        .filter-none { filter: none; }
+        .filter-pinky { filter: saturate(1.4) hue-rotate(-10deg) brightness(0.9); }
+        .filter-deep { filter: contrast(1.3) brightness(0.7) saturate(0.8); }
+        .filter-dream { filter: blur(0.5px) contrast(1.1) brightness(1.1); }
+        .filter-midnight { filter: invert(0.1) contrast(1.2) brightness(0.6); }
+        .filter-glitch { filter: contrast(1.5) saturate(2) hue-rotate(45deg); }
+
+        /* --- Animations --- */
+        .anim-in-kibin { animation: inKibin 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes inKibin { 0% { transform: rotate(var(--rot, 0deg)) scale(0); opacity: 0; } 100% { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; } }
+
+        .anim-in-nettori { animation: inNettori 1s ease-out forwards; }
+        @keyframes inNettori { 0% { transform: rotate(var(--rot, 0deg)) translateY(50px); opacity: 0; } 100% { transform: rotate(var(--rot, 0deg)) translateY(0); opacity: 1; } }
+
+        .anim-in-shizuku { animation: inShizuku 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        @keyframes inShizuku { 0% { transform: rotate(var(--rot, 0deg)) translateY(-100px) scaleY(1.2); opacity: 0; } 60% { transform: rotate(var(--rot, 0deg)) translateY(10px) scaleY(0.9); opacity: 1; } 100% { transform: rotate(var(--rot, 0deg)) translateY(0) scaleY(1); opacity: 1; } }
+
+        .anim-in-fuwari { animation: inFuwari 1.2s ease-in-out forwards; }
+        @keyframes inFuwari { 0% { transform: rotate(var(--rot, 0deg)) scale(0.9); opacity: 0; } 100% { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; } }
+
+        .anim-in-zoom { animation: inZoom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes inZoom { 0% { transform: rotate(var(--rot, 0deg)) scale(0.2); opacity: 0; } 100% { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; } }
+
+        .anim-loop-yure { animation: loopYure 3s ease-in-out infinite alternate; }
+        @keyframes loopYure { from { transform: rotate(calc(var(--rot, 0deg) - 3deg)); } to { transform: rotate(calc(var(--rot, 0deg) + 3deg)); } }
+
+        .anim-loop-kodou { animation: loopKodou 1.5s ease-in-out infinite; }
+        @keyframes loopKodou { 0% { transform: rotate(var(--rot, 0deg)) scale(1); } 15% { transform: rotate(var(--rot, 0deg)) scale(1.05); } 30% { transform: rotate(var(--rot, 0deg)) scale(1); } 100% { transform: rotate(var(--rot, 0deg)) scale(1); } }
+
+        .anim-loop-merome { animation: loopMerome 4s linear infinite; }
+        @keyframes loopMerome { 0% { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; } 50% { transform: rotate(calc(var(--rot, 0deg) + 5deg)) scale(1.02); opacity: 0.8; } 100% { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; } }
+
+        .anim-loop-fuwa { animation: loopFuwa 4s ease-in-out infinite alternate; }
+        @keyframes loopFuwa { from { transform: rotate(var(--rot, 0deg)) translateY(-10px); } to { transform: rotate(var(--rot, 0deg)) translateY(10px); } }
+
+        .anim-loop-spin { animation: loopSpin 12s linear infinite; }
+        @keyframes loopSpin { from { transform: rotate(var(--rot, 0deg)) scale(1); } to { transform: rotate(calc(var(--rot, 0deg) + 360deg)) scale(1); } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-<div id="bg-image-layer"></div>
+    <div id="app" class="relative w-full h-screen bg-black overflow-hidden">
 
-<!-- 流れるテキストレイヤー -->
-<div id="text-stream-layer">
-    <div class="stream-row to-right">
-        もっと激しくして…♡ 壊れるまで中に出して…♡ 全部飲み込みたいの…♡ 止まらないで…♡ 奥まで届いてるよ…♡
-    </div>
-    <div class="stream-row to-left">
-        中が熱くてとろけそう…♡ 逃がさないで…♡ 孕ませて…♡ ザーメンまみれにして…♡ 本能で交わりたいの…♡
-    </div>
-    <div class="stream-row to-right-slow">
-        一滴残らず搾り取ってあげる…♡ 私だけの種馬になって…♡ 絶頂の先へ連れて行って…♡ クチュクチュ鳴ってるよ…♡
-    </div>
-</div>
-
-<div id="speed-lines"></div>
-
-<canvas id="game-canvas"></canvas>
-
-<div id="hud" class="hidden">
-    <!-- ゲージコンテナ -->
-    <div id="gauge-wrapper">
-        <div id="gauge-outer">
-            <div id="liquid">
-                <svg id="wave-svg" class="wave-svg" viewBox="0 0 800 300" preserveAspectRatio="none">
-                    <path d="M0,150 C200,50 400,250 800,150 L800,300 L0,300 Z"></path>
-                </svg>
+        <div id="home-screen" class="screen visible items-center justify-center bg-[#130307]">
+            <h1 class="text-pink-500 text-7xl font-bold mb-4 tracking-tighter drop-shadow-[0_0_15px_#ff4081]">Ero Museum</h1>
+            <h2 class="text-pink-400 text-4xl font-bold mb-20 tracking-tighter drop-shadow-[0_0_10px_#ff4081]">Mode Select</h2>
+            <div class="flex flex-col md:flex-row gap-8">
+                <button onclick="app.changeMode('RANDOM')" class="btn-erotic w-64 h-24 text-2xl font-bold rounded-lg gap-3">
+                    <i class="fa-solid fa-shuffle"></i> RANDOM
+                </button>
+                <button onclick="app.changeMode('GALLERY')" class="btn-erotic w-64 h-24 text-2xl font-bold rounded-lg gap-3">
+                    <i class="fa-solid fa-images"></i> GALLERY
+                </button>
+                <button onclick="app.changeMode('SLIDESHOW')" class="btn-erotic w-64 h-24 text-2xl font-bold rounded-lg gap-3">
+                    <i class="fa-solid fa-play"></i> SLIDESHOW
+                </button>
             </div>
+            <button onclick="app.toggleParallax()" class="btn-erotic absolute bottom-8 right-24 w-14 h-14 rounded-full text-xl active text-green-400"><i class="fa-solid fa-layer-group"></i></button>
+            <button onclick="app.toggleFullscreen()" class="btn-erotic absolute bottom-8 right-8 w-14 h-14 rounded-full text-xl">
+                <i class="fa-solid fa-expand"></i>
+            </button>
         </div>
-    </div>
-    <!-- コンボコンテナ -->
-    <div id="combo-container">
-        <div id="combo-num">0</div>
-        <div class="combo-label">イクぅっ！！</div>
-    </div>
-</div>
 
-<div id="fc-modal">
-    <div class="text-6xl md:text-8xl lg:text-[8rem] text-white italic font-black leading-tight" style="-webkit-text-stroke: clamp(1px, 0.5vw, 4px) var(--love-pink);">FULL COMBO!!</div>
-    <div class="text-xl md:text-3xl lg:text-4xl text-pink-300 font-bold mt-4 break-keep">「一滴ものこさず、全部イクッ...♡」</div>
-</div>
+        <div id="random-screen" class="screen">
+            <div id="random-canvas" class="canvas-area bg-[#0a0104] cursor-pick"></div>
+            
+            <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-start pointer-events-none z-50">
+                <div class="pointer-events-auto">
+                    <button onclick="app.toggleMenu()" class="btn-erotic w-12 h-12 rounded"><i class="fa-solid fa-bars"></i></button>
+                </div>
+                
+                <div class="pointer-events-auto flex items-center gap-4 mx-auto">
+                    <button id="play-btn" onclick="app.togglePlay()" class="btn-erotic w-28 h-12 rounded font-bold text-green-400">START</button>
+                    <div class="flex gap-2 p-1 bg-[#130307] rounded-full border border-pink-900 shadow-xl">
+                        <button onclick="app.setTool('PICK')" data-tool="PICK" class="tool-btn btn-erotic w-12 h-12 rounded-full active"><i class="fa-solid fa-hand-pointer"></i></button>
+                        <button onclick="app.setTool('LOCK')" data-tool="LOCK" class="tool-btn btn-erotic w-12 h-12 rounded-full"><i class="fa-solid fa-lock"></i></button>
+                        <button onclick="app.setTool('POP')" data-tool="POP" class="tool-btn btn-erotic w-12 h-12 rounded-full"><i class="fa-solid fa-heart-crack"></i></button>
+                        <button onclick="app.setTool('SOLO')" data-tool="SOLO" class="tool-btn btn-erotic w-12 h-12 rounded-full"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
 
-<div id="home-screen" class="absolute inset-0 z-[30000] bg-black/85 flex items-center justify-center p-4 md:p-10 overflow-y-auto">
-    <div class="max-w-5xl w-full flex flex-col items-center my-auto">
-        <h1 class="text-5xl md:text-8xl lg:text-[10rem] font-black italic mb-8 md:mb-16 title-shake text-center leading-none" style="text-shadow: 6px 6px 0 var(--love-pink), -3px -3px 0 #fff;">
-            絶頂快楽<br><span class="text-4xl md:text-6xl lg:text-8xl">オナリズム</span>
-        </h1>
-        <div id="drop-zone" class="ui-box w-full max-w-2xl p-6 md:p-12 flex flex-col items-center justify-center mb-8 md:mb-12 border-4 border-dashed border-pink-500 hover:bg-pink-900/10 transition-colors cursor-pointer group">
-            <span class="text-xl md:text-3xl font-bold mb-4 md:mb-6 text-center group-hover:scale-110 transition-transform">画像と楽曲を「注入」してください♡</span>
-            <div id="preview-area" class="flex flex-wrap gap-2 md:gap-4 justify-center"></div>
-            <input type="file" id="file-input" multiple class="hidden">
-        </div>
-        <button id="start-btn" class="ui-box text-3xl md:text-6xl px-12 md:px-24 py-4 md:py-8 opacity-30 cursor-not-allowed" disabled>
-            準備OK♡
-        </button>
-    </div>
-</div>
-
-<!-- トップHUD: スコアとポーズ -->
-<div id="top-hud-layer" class="hidden">
-    <div class="flex flex-col gap-2 md:gap-4 pointer-auto">
-        <div class="ui-box text-2xl md:text-4xl lg:text-5xl px-4 md:px-8 py-2 md:py-4">SCORE: <span id="score-val" class="font-mono ml-2">0000000</span></div>
-        <div class="ui-box text-lg md:text-2xl lg:text-3xl px-3 md:px-6 py-1 md:py-2">MISS: <span id="miss-val" class="font-mono ml-2">0</span></div>
-    </div>
-    <button id="pause-btn" class="ui-box text-xl md:text-3xl px-4 md:px-8 py-2 md:py-4 pointer-auto">PAUSE</button>
-</div>
-
-<div id="pause-menu" class="absolute inset-0 z-[40000] bg-black/95 hidden flex flex-col items-center justify-center gap-6 md:gap-10 p-4">
-    <div class="ui-box text-4xl md:text-6xl lg:text-8xl px-8 md:px-12 py-4 md:py-6 mb-6 md:mb-10 text-center whitespace-normal">焦らさないで...♡</div>
-    <button id="resume-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">続ける</button>
-    <button id="restart-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">最初から</button>
-    <button id="home-btn" class="ui-box text-2xl md:text-5xl w-full max-w-[400px] py-4 md:py-6">ホームへ</button>
-</div>
-
-<div id="result-screen" class="absolute inset-0 z-[25000] bg-[#050005] hidden overflow-hidden">
-    <div id="result-tile-container"></div>
-    <div class="relative z-10 w-full h-full flex flex-col items-center justify-center bg-black/50 pointer-events-none p-4">
-        <div class="flex flex-col md:flex-row gap-6 md:gap-12 items-center mb-8 md:mb-16 pointer-events-auto">
-            <div class="ui-box text-[6rem] md:text-[10rem] lg:text-[12rem] px-8 md:px-16 py-4 md:py-8" id="final-rank">S</div>
-            <div class="flex flex-col gap-2 md:gap-4 w-full md:w-auto">
-                <div class="ui-box text-2xl md:text-4xl lg:text-5xl px-6 md:px-10 py-2 md:py-4 justify-between md:justify-center">SCORE: <span id="res-score" class="ml-4">0</span></div>
-                <div class="ui-box text-xl md:text-2xl lg:text-3xl px-6 md:px-10 py-2 justify-between md:justify-center">MISS: <span id="res-miss" class="ml-4">0</span></div>
+                <div class="pointer-events-auto flex items-center gap-2">
+                    <button onclick="app.toggleGravity()" class="btn-erotic w-12 h-12 rounded"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button onclick="app.changeMode('HOME')" class="btn-erotic w-12 h-12 rounded"><i class="fa-solid fa-house"></i></button>
+                </div>
             </div>
+
+            <div id="side-menu" class="absolute top-0 left-0 w-80 h-full bg-[#130307f0] border-r border-pink-900 z-[60] transform -translate-x-full transition-transform duration-300 p-6 overflow-y-auto">
+                <div class="flex justify-end mb-2">
+                    <button onclick="app.toggleMenu()" class="text-pink-300 hover:text-white text-2xl p-2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="counter-board w-full p-3 rounded mb-6 flex flex-col items-center">
+                    <span class="text-[10px] opacity-70">DISPLAYED IMAGES</span>
+                    <span id="canvas-counter" class="text-3xl font-bold italic">0000</span>
+                </div>
+
+                <div id="menu-upload" onclick="document.getElementById('file-input').click()" 
+                     class="w-full h-24 mb-6 border-2 border-dashed border-pink-900 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-pink-900/20 transition-colors">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-pink-500 mb-2"></i>
+                    <span class="text-[10px] text-pink-300">UPLOAD (DRAG & DROP)</span>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>不透明度</span><span id="label-opacity">100%</span></div>
+                        <input type="range" class="w-full accent-pink-500" min="10" max="100" value="100" oninput="app.setParam('opacity', this.value)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>表示間隔</span><span id="label-interval">1.0s</span></div>
+                        <input type="range" class="w-full accent-pink-500" min="0.1" max="5.0" step="0.1" value="1.0" oninput="app.setParam('interval', this.value)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>エロ加工度</span><span id="label-ero">0%</span></div>
+                        <input type="range" class="w-full accent-pink-500" min="0" max="100" value="0" oninput="app.setParam('eroDegree', this.value)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>サイズ範囲 (px)</span><span id="label-size">100 - 300</span></div>
+                        <div class="range-container">
+                            <div class="range-track"></div>
+                            <input type="range" id="size-min" min="50" max="800" value="100" oninput="app.updateSizeRange()">
+                            <input type="range" id="size-max" min="50" max="800" value="300" oninput="app.updateSizeRange()">
+                        </div>
+                    </div>
+
+                    <div id="preset-groups" class="space-y-6 pt-4 border-t border-pink-900/50"></div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-4">
+                        <button onclick="app.randomizeParams()" class="btn-erotic h-10 text-[10px]">RANDOMIZE</button>
+                        <button onclick="app.clearCanvas()" class="btn-erotic h-10 text-[10px] text-red-400">CLEAR ALL</button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="app.toggleParallax()" class="btn-erotic absolute bottom-4 right-20 w-12 h-12 rounded-full active text-green-400"><i class="fa-solid fa-layer-group"></i></button>
+            <button onclick="app.toggleFullscreen()" class="btn-erotic absolute bottom-4 right-4 w-12 h-12 rounded-full"><i class="fa-solid fa-expand"></i></button>
         </div>
-        <div class="ui-box text-lg md:text-3xl lg:text-4xl italic text-pink-300 px-6 md:px-12 py-4 md:py-6 mb-10 md:mb-20 text-center max-w-4xl pointer-events-auto whitespace-normal leading-relaxed" id="res-comment">「最高に気持ちよかったよ...」</div>
-        <div class="flex flex-col md:flex-row gap-4 md:gap-10 pointer-events-auto w-full max-w-2xl md:max-w-none items-center justify-center">
-            <button onclick="restartGame()" class="ui-box text-xl md:text-4xl px-8 md:px-16 py-4 md:py-6 w-full md:w-auto">もう一度イク</button>
-            <button onclick="goHome()" class="ui-box text-xl md:text-4xl px-8 md:px-16 py-4 md:py-6 w-full md:w-auto">ホームに戻る</button>
+
+        <div id="gallery-screen" class="screen">
+            <div id="gallery-canvas" class="canvas-area bg-[#070103] cursor-pick"></div>
+            <button onclick="app.toggleGravity()" class="btn-erotic absolute top-4 right-20 w-12 h-12 rounded z-50"><i class="fa-solid fa-arrow-down"></i></button>
+            <button onclick="app.changeMode('HOME')" class="btn-erotic absolute top-4 right-4 w-12 h-12 rounded z-50"><i class="fa-solid fa-house"></i></button>
+            
+            <button onclick="app.toggleParallax()" class="btn-erotic absolute top-20 right-20 w-12 h-12 rounded z-50 active text-green-400"><i class="fa-solid fa-layer-group"></i></button>
+            <button onclick="app.toggleFullscreen()" class="btn-erotic absolute top-20 right-4 w-12 h-12 rounded z-50"><i class="fa-solid fa-expand"></i></button>
+
+            <div id="gallery-palette-container" class="absolute bottom-0 left-0 w-full h-24 bg-[#130307e6] border-t border-pink-900 flex items-center px-4 gap-3 z-50 overflow-x-auto transition-transform duration-300">
+                <button onclick="app.togglePalette('gallery')" class="absolute top-1 right-2 text-pink-500 hover:text-white z-[60] text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="document.getElementById('file-input').click()" class="palette-item w-[70px] h-[70px] flex flex-col items-center justify-center bg-[#2d0a15] text-pink-500 shrink-0 border border-pink-900">
+                    <i class="fa-solid fa-plus text-xl"></i>
+                    <span class="text-[8px]">UPLOAD</span>
+                </button>
+                <div id="palette-list" class="flex gap-2"></div>
+            </div>
+            <button id="gallery-palette-open" onclick="app.togglePalette('gallery')" class="btn-erotic absolute bottom-4 right-4 w-12 h-12 rounded-full z-[60] hidden"><i class="fa-solid fa-palette"></i></button>
         </div>
+
+        <div id="slideshow-screen" class="screen">
+            <div id="slideshow-canvas" class="canvas-area bg-[#0a0104] flex items-center justify-center"></div>
+            
+            <button onclick="app.toggleGravity()" class="btn-erotic absolute top-4 right-20 w-12 h-12 rounded z-50"><i class="fa-solid fa-arrow-down"></i></button>
+            <button onclick="app.changeMode('HOME')" class="btn-erotic absolute top-4 right-4 w-12 h-12 rounded z-50"><i class="fa-solid fa-house"></i></button>
+            
+            <button onclick="app.toggleParallax()" class="btn-erotic absolute top-20 right-20 w-12 h-12 rounded z-50 active text-green-400"><i class="fa-solid fa-layer-group"></i></button>
+            <button onclick="app.toggleFullscreen()" class="btn-erotic absolute top-20 right-4 w-12 h-12 rounded z-50"><i class="fa-solid fa-expand"></i></button>
+            
+            <div id="slideshow-controls" class="absolute top-4 left-4 flex gap-4 z-50 transition-transform duration-300">
+                <button onclick="app.toggleMenuSlideshow()" class="btn-erotic w-12 h-12 rounded"><i class="fa-solid fa-bars"></i></button>
+                <button id="slideshow-play-btn" onclick="app.toggleSlideshowPlay()" class="btn-erotic w-28 h-12 rounded font-bold text-green-400">START</button>
+            </div>
+
+            <div id="slideshow-side-menu" class="absolute top-0 left-0 w-80 h-[calc(100%-6rem)] bg-[#130307f0] border-r border-pink-900 z-[60] transform -translate-x-full transition-transform duration-300 p-6 overflow-y-auto">
+                <div class="flex justify-end mb-2">
+                    <button onclick="app.toggleMenuSlideshow()" class="text-pink-300 hover:text-white text-2xl p-2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>表示間隔</span><span id="label-slide-interval">3.0s</span></div>
+                        <input type="range" class="w-full accent-pink-500" min="0.1" max="10.0" step="0.1" value="3.0" oninput="app.setSlideParam('interval', this.value)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2"><span>エロ加工度</span><span id="label-slide-ero">0%</span></div>
+                        <input type="range" class="w-full accent-pink-500" min="0" max="100" value="0" oninput="app.setSlideParam('eroDegree', this.value)">
+                    </div>
+
+                    <div id="slide-preset-groups" class="space-y-6 pt-4 border-t border-pink-900/50"></div>
+                </div>
+            </div>
+
+            <div id="slideshow-palette-container" class="absolute bottom-0 left-0 w-full h-24 bg-[#130307e6] border-t border-pink-900 flex items-center px-4 gap-3 z-50 overflow-x-auto transition-transform duration-300">
+                <button onclick="app.togglePalette('slideshow')" class="absolute top-1 right-2 text-pink-500 hover:text-white z-[60] text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="document.getElementById('file-input').click()" class="palette-item w-[70px] h-[70px] flex flex-col items-center justify-center bg-[#2d0a15] text-pink-500 shrink-0 border border-pink-900">
+                    <i class="fa-solid fa-plus text-xl"></i>
+                    <span class="text-[8px]">UPLOAD</span>
+                </button>
+                <div id="slideshow-palette-list" class="flex gap-2"></div>
+            </div>
+            <button id="slideshow-palette-open" onclick="app.togglePalette('slideshow')" class="btn-erotic absolute bottom-4 right-4 w-12 h-12 rounded-full z-[60] hidden"><i class="fa-solid fa-palette"></i></button>
+        </div>
+
+        <div id="solo-screen" class="screen bg-black">
+            <button onclick="app.exitSolo()" class="btn-erotic absolute top-4 right-4 w-12 h-12 rounded z-[80] text-red-500 border-red-900">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex h-full w-full">
+                <div class="w-80 bg-[#130307] border-r border-pink-900 p-6 flex flex-col z-[70]">
+                    <h2 class="text-xl font-bold text-pink-500 mb-8">SOLO EDIT</h2>
+                    
+                    <div class="mb-6 pb-6 border-b border-pink-900/50">
+                        <div class="flex justify-between text-[10px] mb-2"><span>エロ加工度</span><span id="label-solo-ero">0%</span></div>
+                        <input type="range" id="solo-ero-input" class="w-full accent-pink-500" min="0" max="100" value="0" oninput="app.setSoloEro(this.value)">
+                    </div>
+
+                    <div id="solo-presets" class="space-y-6 flex-1 overflow-y-auto pr-2"></div>
+                </div>
+                <div id="solo-viewport" class="flex-1 relative flex items-center justify-center overflow-hidden">
+                    <div id="solo-img-container" class="relative transition-transform duration-100 ease-out origin-center"></div>
+                </div>
+            </div>
+
+            <button onclick="app.toggleParallax()" class="btn-erotic absolute bottom-4 right-20 w-12 h-12 rounded-full z-[80] active text-green-400"><i class="fa-solid fa-layer-group"></i></button>
+            <button onclick="app.toggleFullscreen()" class="btn-erotic absolute bottom-4 right-4 w-12 h-12 rounded-full z-[80]"><i class="fa-solid fa-expand"></i></button>
+        </div>
+
     </div>
-</div>
 
-<script>
-    const canvas = document.getElementById('game-canvas');
-    const ctx = canvas.getContext('2d');
-    const startBtn = document.getElementById('start-btn');
-    const fileInput = document.getElementById('file-input');
-    const dropZone = document.getElementById('drop-zone');
-    const previewArea = document.getElementById('preview-area');
-    const pauseBtn = document.getElementById('pause-btn');
-    const liquid = document.getElementById('liquid');
-    const waveSvg = document.getElementById('wave-svg');
-    const gaugeOuter = document.getElementById('gauge-outer');
-    const gaugeWrapper = document.getElementById('gauge-wrapper');
-    const fcModal = document.getElementById('fc-modal');
+    <input type="file" id="file-input" class="hidden" multiple accept="image/*,video/*,audio/*" onchange="app.handleFiles(this.files)">
 
-    let audioCtx, musicBuffer, musicSource;
-    let images = [];
-    let gameActive = false, isPaused = false;
-    let startTime = 0, pauseOffset = 0;
-    let score = 0, combo = 0, missCount = 0;
-    let notes = [];
-    let lastBgUpdate = 0;
+    <script>
+        const app = {
+            mode: 'HOME',
+            prevMode: 'HOME',
+            isPlaying: false,
+            images: [],
+            params: {
+                opacity: 100, interval: 1000, sizeMin: 100, sizeMax: 300, eroDegree: 0,
+                filter: 'filter-none', frame: 'frame-none', animIn: 'none', animLoop: 'none'
+            },
+            slideParams: {
+                opacity: 100, interval: 3000, eroDegree: 0,
+                filter: 'filter-none', frame: 'frame-none', animIn: 'none', animLoop: 'none'
+            },
+            currentTool: 'PICK',
+            intervalId: null,
+            slideIntervalId: null,
+            isSlidePlaying: false,
+            slideIndex: 0,
+            zIndexCounter: 100,
+            soloTarget: null,
+            soloZoom: 1,
+            burstInterval: null,
+            mx: 0, my: 0,
 
-    const LANE_COUNT = 4;
-    const NOTE_SPEED = 8.5;
-    const JUDGE_Y = 0.88;
-    const NOTE_RADIUS = 70;
+            // --- 追加プロパティ ---
+            gravityEnabled: false,
+            parallaxEnabled: true,
+            parallaxX: 0, parallaxY: 0, targetParallaxX: 0, targetParallaxY: 0,
+            audioCtx: null, analyser: null, dataArray: null, bgmAudio: null,
 
-    dropZone.onclick = () => fileInput.click();
-    fileInput.onchange = async (e) => {
-        const files = e.target.files;
-        let audioFile = null;
-        images = []; previewArea.innerHTML = '';
-        for (const file of files) {
-            if (file.type.startsWith('audio/')) audioFile = file;
-            else if (file.type.startsWith('image/')) {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                images.push(img);
-                const prev = document.createElement('div');
-                prev.className = "w-12 h-12 md:w-20 md:h-20 border-2 border-white bg-cover bg-center";
-                prev.style.backgroundImage = `url(${img.src})`;
-                previewArea.appendChild(prev);
-            }
-        }
-        if (audioFile && images.length > 0) {
-            startBtn.disabled = false;
-            startBtn.classList.remove('opacity-30', 'cursor-not-allowed');
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const ab = await audioFile.arrayBuffer();
-            musicBuffer = await audioCtx.decodeAudioData(ab);
-        }
-    };
+            init() {
+                this.renderPresets('preset-groups', true, false);
+                this.renderPresets('slide-preset-groups', true, true);
+                this.setupCoreEvents();
+                this.updateCounter();
+                this.setTool('PICK');
 
-    function playHitSound(lane) {
-        const t = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.frequency.setValueAtTime(150 + lane * 50, t);
-        osc.frequency.exponentialRampToValueAtTime(40, t + 0.15);
-        gain.gain.setValueAtTime(0.3, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(t + 0.2);
-    }
+                this.setupAudio();
+                this.startEngine();
+            },
 
-    function initGame() {
-        document.getElementById('home-screen').style.display = 'none';
-        document.getElementById('hud').classList.remove('hidden');
-        document.getElementById('top-hud-layer').classList.remove('hidden');
-        fcModal.classList.remove('active');
-        waveSvg.style.opacity = "1";
-        score = 0; combo = 0; missCount = 0; notes = [];
-        updateUI();
-        const duration = musicBuffer.duration;
-        for (let t = 2.0; t < duration - 2.0; t += 0.45) {
-            if (Math.random() > 0.1) notes.push({ time: t, lane: Math.floor(Math.random() * 4), hit: false });
-        }
-        startMusic(0);
-        gameActive = true;
-        resize();
-        requestAnimationFrame(gameLoop);
-    }
-
-    function startMusic(offset) {
-        if (musicSource) { try { musicSource.stop(); } catch(e){} }
-        musicSource = audioCtx.createBufferSource();
-        musicSource.buffer = musicBuffer;
-        musicSource.connect(audioCtx.destination);
-        musicSource.onended = () => { if(!isPaused && gameActive) triggerEndFlow(); };
-        startTime = audioCtx.currentTime - offset;
-        musicSource.start(0, offset);
-    }
-
-    function gameLoop(time) {
-        if (!gameActive || isPaused) return;
-        const now = audioCtx.currentTime - startTime;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawLanes();
-        drawNotes(now);
-        updateBackground(time);
-        if (combo >= 10 && Math.random() < 0.03) spawnInterference();
-        requestAnimationFrame(gameLoop);
-    }
-
-    function drawLanes() {
-        const laneW = canvas.width / LANE_COUNT;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 4;
-        for (let i = 1; i < LANE_COUNT; i++) {
-            ctx.beginPath(); ctx.moveTo(i * laneW, 0); ctx.lineTo(i * laneW, canvas.height); ctx.stroke();
-        }
-        ctx.fillStyle = "#fff";
-        ctx.shadowBlur = 25; ctx.shadowColor = "var(--love-pink)";
-        ctx.fillRect(0, canvas.height * JUDGE_Y, canvas.width, 12);
-        ctx.shadowBlur = 0;
-    }
-
-    function drawNotes(now) {
-        const laneW = canvas.width / LANE_COUNT;
-        const judgeY = canvas.height * JUDGE_Y;
-        // 画面幅に応じてノートサイズを調整
-        const currentRadius = Math.min(NOTE_RADIUS, laneW * 0.4);
-
-        notes.forEach(n => {
-            if (n.hit) return;
-            const y = judgeY - (n.time - now) * NOTE_SPEED * 115;
-            if (y > canvas.height + 200) { n.hit = true; miss(); return; }
-            const x = (n.lane + 0.5) * laneW;
-            const img = images[n.lane % images.length];
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.beginPath(); ctx.arc(0, 0, currentRadius + 6, 0, Math.PI * 2);
-            ctx.fillStyle = "#fff"; ctx.shadowBlur = 20; ctx.shadowColor = "var(--love-pink)"; ctx.fill();
-            ctx.beginPath(); ctx.arc(0, 0, currentRadius, 0, Math.PI * 2); ctx.clip();
-            const s = Math.max(currentRadius*2 / img.width, currentRadius*2 / img.height);
-            ctx.drawImage(img, -img.width*s/2, -img.height*s/2, img.width*s, img.height*s);
-            ctx.restore();
-        });
-    }
-
-    function updateBackground(time) {
-        if (time - lastBgUpdate > 3000) {
-            const bg = document.getElementById('bg-image-layer');
-            bg.style.backgroundImage = `url(${images[Math.floor(Math.random() * images.length)].src})`;
-            lastBgUpdate = time;
-        }
-    }
-
-    function spawnInterference() {
-        const img = images[Math.floor(Math.random() * images.length)];
-        const el = document.createElement('div');
-        el.className = 'interference';
-        const ratio = img.width / img.height;
-        const width = 350 + Math.random() * 300;
-        const height = width / ratio;
-        el.style.width = width + 'px'; el.style.height = height + 'px';
-        el.style.left = Math.random() * (window.innerWidth - width) + 'px';
-        el.style.top = Math.random() * (window.innerHeight - height) + 'px';
-        el.style.backgroundImage = `url(${img.src})`; el.style.backgroundSize = 'cover';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 1800);
-    }
-
-    // Touch Support Added Here
-    canvas.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevent scrolling
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            const t = e.changedTouches[i];
-            const lane = Math.floor(t.clientX / (canvas.width / LANE_COUNT));
-            handleInput(lane);
-        }
-    }, { passive: false });
-
-    canvas.addEventListener('mousedown', (e) => {
-        const lane = Math.floor(e.clientX / (canvas.width / LANE_COUNT));
-        handleInput(lane);
-    });
-
-    function handleInput(lane) {
-        if (!gameActive || isPaused) return;
-        const now = audioCtx.currentTime - startTime;
-        const noteIndex = notes.findIndex(n => !n.hit && n.lane === lane && Math.abs(n.time - now) < 0.22);
-        if (noteIndex !== -1) { notes[noteIndex].hit = true; hit(lane); }
-    }
-
-    function hit(lane) {
-        combo++; score += 1000 + combo * 150;
-        playHitSound(lane); spawnOnomatopee(lane);
-        const sl = document.getElementById('speed-lines');
-        sl.classList.remove('line-hit-anim'); void sl.offsetWidth; sl.classList.add('line-hit-anim');
-        updateUI();
-    }
-
-    function miss() { combo = 0; missCount++; updateUI(); }
-
-    function updateUI() {
-        document.getElementById('score-val').innerText = score.toString().padStart(7, '0');
-        document.getElementById('miss-val').innerText = missCount;
-        const comboContainer = document.getElementById('combo-container');
-        if (combo > 0) {
-            comboContainer.style.display = 'block';
-            const num = document.getElementById('combo-num');
-            num.innerText = combo; num.classList.remove('pop-anim'); void num.offsetWidth; num.classList.add('pop-anim');
-        } else { comboContainer.style.display = 'none'; }
-        liquid.style.height = Math.min(100, (combo / 40) * 100) + '%';
-    }
-
-    function spawnOnomatopee(lane) {
-        const words = ["ビチャッ！", "クチュ...！", "アッ♡", "んぉっ！", "イッ...！", "ハァッハァッ！"];
-        const el = document.createElement('div');
-        el.className = 'onomatopee';
-        el.innerText = words[Math.floor(Math.random() * words.length)];
-        el.style.left = (lane * 25 + 5 + Math.random() * 5) + '%';
-        el.style.top = '70%';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 700);
-    }
-
-    function triggerEndFlow() {
-        gameActive = false;
-        waveSvg.style.opacity = "0";
-
-        if (missCount === 0 && score > 0) {
-            fcModal.classList.add('active');
-            liquid.style.transition = "height 2s ease-out";
-            liquid.style.height = "100%";
-
-            setTimeout(() => {
-                for (let i = 0; i < 40; i++) {
-                    setTimeout(() => {
-                        const drop = document.createElement('div');
-                        drop.className = 'overflow-drop';
-                        drop.style.left = (Math.random() * 80 + 10) + 'px';
-                        drop.style.width = (8 + Math.random() * 8) + 'px';
-                        gaugeWrapper.appendChild(drop);
-                        setTimeout(() => drop.remove(), 1200);
-                    }, i * 80);
+            // --- 新規追加・修正メソッド群 ---
+            toggleParallax() {
+                this.parallaxEnabled = !this.parallaxEnabled;
+                document.querySelectorAll('.fa-layer-group').forEach(icon => {
+                    if (this.parallaxEnabled) {
+                        icon.parentElement.classList.add('active', 'text-green-400');
+                    } else {
+                        icon.parentElement.classList.remove('active', 'text-green-400');
+                    }
+                });
+                if(!this.parallaxEnabled) {
+                    this.parallaxX = 0; this.parallaxY = 0;
+                    this.targetParallaxX = 0; this.targetParallaxY = 0;
                 }
-            }, 1000);
+            },
 
-            for(let i=0; i<80; i++) {
-                setTimeout(() => {
-                    const d = document.createElement('div');
-                    d.className = 'drip-fluid';
-                    d.style.left = Math.random() * 100 + 'vw';
-                    d.style.width = (15 + Math.random() * 30) + 'px';
-                    d.style.height = (100 + Math.random() * 150) + 'px';
-                    d.style.animationDuration = (0.6 + Math.random() * 0.8) + 's';
-                    document.body.appendChild(d);
-                    setTimeout(() => d.remove(), 1500);
-                }, i * 35);
+            toggleGravity() {
+                this.gravityEnabled = !this.gravityEnabled;
+                document.querySelectorAll('.fa-arrow-down').forEach(icon => {
+                    if (this.gravityEnabled) {
+                        icon.parentElement.classList.add('active', 'text-green-400');
+                    } else {
+                        icon.parentElement.classList.remove('active', 'text-green-400');
+                    }
+                });
+            },
+
+            setupAudio() {
+                this.bgmAudio = new Audio();
+                this.bgmAudio.loop = true;
+            },
+
+            initAudioReactive(file) {
+                if(!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioCtx.createAnalyser();
+                    this.analyser.fftSize = 256;
+                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                    const source = this.audioCtx.createMediaElementSource(this.bgmAudio);
+                    source.connect(this.analyser);
+                    this.analyser.connect(this.audioCtx.destination);
+                }
+                if(this.audioCtx.state === 'suspended') this.audioCtx.resume();
+                this.bgmAudio.src = URL.createObjectURL(file);
+                this.bgmAudio.play();
+            },
+
+            playPopSound() {
+                if(!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const ctx = this.audioCtx;
+                if(ctx.state === 'suspended') ctx.resume();
+                
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const filter = ctx.createBiquadFilter();
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1000 + Math.random()*500, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+                
+                filter.type = 'bandpass';
+                filter.frequency.value = 1200;
+                
+                gain.gain.setValueAtTime(0.8, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+                
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(2000 + Math.random()*1000, ctx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.2);
+                gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc2.start();
+                osc2.stop(ctx.currentTime + 0.2);
+            },
+
+            playBounceSound(velocity) {
+                if(!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const ctx = this.audioCtx;
+                if(ctx.state === 'suspended') ctx.resume();
+                
+                const vol = Math.min(1, Math.abs(velocity) / 30) * 0.4;
+                if (vol < 0.01) return;
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(120 + Math.random()*40, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1);
+                
+                gain.gain.setValueAtTime(vol, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.1);
+            },
+
+            triggerJiggle(el) {
+                el._jiggleTime = 400; 
+            },
+
+            startEngine() {
+                // パララックス用イベント
+                document.addEventListener('mousemove', (e) => {
+                    this.targetParallaxX = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+                    this.targetParallaxY = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+                });
+                window.addEventListener('deviceorientation', (e) => {
+                    if(e.gamma && e.beta) {
+                        this.targetParallaxX = Math.max(-1, Math.min(1, e.gamma / 45));
+                        this.targetParallaxY = Math.max(-1, Math.min(1, (e.beta - 45) / 45));
+                    }
+                });
+
+                const loop = () => {
+                    // パララックスの補間
+                    if (this.parallaxEnabled) {
+                        this.parallaxX += (this.targetParallaxX - this.parallaxX) * 0.1;
+                        this.parallaxY += (this.targetParallaxY - this.parallaxY) * 0.1;
+                    }
+
+                    // オーディオの低音（ベース）抽出
+                    let bass = 0;
+                    if(this.analyser) {
+                        this.analyser.getByteFrequencyData(this.dataArray);
+                        bass = (this.dataArray[0] + this.dataArray[1] + this.dataArray[2]) / 3;
+                    }
+                    const audioScale = 1 + (bass / 255) * 0.15;
+
+                    const elements = Array.from(document.querySelectorAll('.canvas-area .art-object'));
+
+                    // 第一段階：重力と移動の計算
+                    elements.forEach(el => {
+                        if(el._vy === undefined) el._vy = 0;
+                        if(el._vx === undefined) el._vx = 0;
+                        
+                        const isDragging = (el.style.zIndex === '100000');
+                        
+                        // 重力による位置更新（ドラッグ中ではない要素のみ）
+                        if(this.gravityEnabled && !isDragging) {
+                            if(el.style.position !== 'absolute') {
+                                el.style.left = el.offsetLeft + 'px';
+                                el.style.top = el.offsetTop + 'px';
+                                el.style.position = 'absolute';
+                            }
+                            el._vy += 0.5; // 重力
+                            el._vx *= 0.95; // 空気抵抗・摩擦
+                            
+                            let top = parseFloat(el.style.top) || 0;
+                            let left = parseFloat(el.style.left) || 0;
+                            
+                            top += el._vy;
+                            left += el._vx;
+                            
+                            const h = parseFloat(el.style.height) || el.offsetHeight || 0;
+                            const w = parseFloat(el.style.width) || el.offsetWidth || 0;
+                            
+                            // 壁との衝突判定（パララックスの表示位置を加味して見えない壁を解消）
+                            const px = el._px || 0;
+                            const py = el._py || 0;
+                            const visualLeft = left + px;
+                            const visualTop = top + py;
+
+                            // 画面端の壁との衝突
+                            if (visualLeft < 0) { 
+                                left = -px; 
+                                el._vx *= -0.7; 
+                            } else if (visualLeft + w > window.innerWidth) { 
+                                left = window.innerWidth - w - px; 
+                                el._vx *= -0.7; 
+                            }
+
+                            // 床との衝突
+                            if(visualTop + h > window.innerHeight) {
+                                top = window.innerHeight - h - py;
+                                el._vy *= -0.7; // 跳ね返り
+                                el._vx *= 0.8; // 床の摩擦
+                                if(Math.abs(el._vy) > 2) {
+                                    this.triggerJiggle(el);
+                                    this.playBounceSound(el._vy);
+                                }
+                            }
+                            el.style.top = top + 'px';
+                            el.style.left = left + 'px';
+                        }
+                    });
+
+                    // 第二段階：衝突判定と位置の補正 (相互干渉)
+                    if (this.gravityEnabled) {
+                        for(let iter = 0; iter < 2; iter++) {
+                            for (let i = 0; i < elements.length; i++) {
+                                const el1 = elements[i];
+                                const isDrag1 = (el1.style.zIndex === '100000');
+
+                                let t1 = parseFloat(el1.style.top) || 0;
+                                let l1 = parseFloat(el1.style.left) || 0;
+                                const w1 = parseFloat(el1.style.width) || el1.offsetWidth || 0;
+                                const h1 = parseFloat(el1.style.height) || el1.offsetHeight || 0;
+                                // 当たり判定精度の向上：描画位置ベースで中心点を計算
+                                const cx1 = l1 + w1/2 + (el1._px || 0);
+                                const cy1 = t1 + h1/2 + (el1._py || 0);
+
+                                for (let j = i + 1; j < elements.length; j++) {
+                                    const el2 = elements[j];
+                                    const isDrag2 = (el2.style.zIndex === '100000');
+
+                                    // 両方とも掴んでいる状態なら互いに干渉しない
+                                    if (isDrag1 && isDrag2) continue;
+
+                                    let t2 = parseFloat(el2.style.top) || 0;
+                                    let l2 = parseFloat(el2.style.left) || 0;
+                                    const w2 = parseFloat(el2.style.width) || el2.offsetWidth || 0;
+                                    const h2 = parseFloat(el2.style.height) || el2.offsetHeight || 0;
+                                    const cx2 = l2 + w2/2 + (el2._px || 0);
+                                    const cy2 = t2 + h2/2 + (el2._py || 0);
+
+                                    // AABB衝突判定 (中心間距離)
+                                    const dx = cx2 - cx1;
+                                    const dy = cy2 - cy1;
+                                    const overlapX = (w1 + w2) / 2 - Math.abs(dx);
+                                    const overlapY = (h1 + h2) / 2 - Math.abs(dy);
+
+                                    if (overlapX > 0 && overlapY > 0) {
+                                        if (overlapX < overlapY) {
+                                            // 左右の衝突
+                                            if (isDrag1) {
+                                                const pushX = overlapX;
+                                                if (dx > 0) l2 += pushX; else l2 -= pushX;
+                                                el2._vx = (el2._vx - el1._vx) * 0.6; // 弾き飛ばす
+                                            } else if (isDrag2) {
+                                                const pushX = overlapX;
+                                                if (dx > 0) l1 -= pushX; else l1 += pushX;
+                                                el1._vx = (el1._vx - el2._vx) * 0.6;
+                                            } else {
+                                                const pushX = overlapX / 2;
+                                                if (dx > 0) { l1 -= pushX; l2 += pushX; } 
+                                                else { l1 += pushX; l2 -= pushX; }
+                                                
+                                                const v1x = el1._vx;
+                                                el1._vx = el2._vx * 0.6;
+                                                el2._vx = v1x * 0.6;
+                                            }
+                                        } else {
+                                            // 上下の衝突
+                                            if (isDrag1) {
+                                                const pushY = overlapY;
+                                                if (dy > 0) t2 += pushY; else t2 -= pushY;
+                                                el2._vy = (el2._vy - el1._vy) * 0.6;
+                                            } else if (isDrag2) {
+                                                const pushY = overlapY;
+                                                if (dy > 0) t1 -= pushY; else t1 += pushY;
+                                                el1._vy = (el1._vy - el2._vy) * 0.6;
+                                            } else {
+                                                const pushY = overlapY / 2;
+                                                if (dy > 0) { t1 -= pushY; t2 += pushY; } 
+                                                else { t1 += pushY; t2 -= pushY; }
+
+                                                const relVy = Math.abs(el1._vy - el2._vy);
+                                                if (relVy > 2 && iter === 0) {
+                                                    this.triggerJiggle(el1);
+                                                    this.triggerJiggle(el2);
+                                                    this.playBounceSound(relVy);
+                                                }
+
+                                                const v1y = el1._vy;
+                                                el1._vy = el2._vy * 0.6;
+                                                el2._vy = v1y * 0.6;
+                                            }
+                                        }
+                                        el1.style.left = l1 + 'px'; el1.style.top = t1 + 'px';
+                                        el2.style.left = l2 + 'px'; el2.style.top = t2 + 'px';
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 第三段階：見た目の更新（アニメーション、パララックスなど）
+                    elements.forEach(el => {
+                        // ぷるぷる（Soft Body）アニメーション
+                        if(el._jiggleTime > 0) {
+                            el._jiggleTime -= 16;
+                            let prog = 1 - (el._jiggleTime / 400);
+                            if(prog >= 1) { el._jsx = 1; el._jsy = 1; el._jiggleTime = 0; }
+                            else {
+                                let damp = 1 - prog;
+                                el._jsx = 1 + Math.sin(prog * Math.PI * 6) * 0.1 * damp;
+                                el._jsy = 1 - Math.sin(prog * Math.PI * 6) * 0.1 * damp;
+                            }
+                        } else {
+                            el._jsx = 1; el._jsy = 1;
+                        }
+
+                        // 変形の合成
+                        const rot = el.style.getPropertyValue('--rot') || '0deg';
+                        let depth = (parseInt(el.style.zIndex) || 100) - 100;
+                        
+                        // Pickで掴んでいる要素はカーソル追従を正確にするため一時的にパララックス無効化
+                        if (el.style.zIndex === '100000') {
+                            el._px = 0;
+                            el._py = 0;
+                        } else {
+                            el._px = this.parallaxX * depth * 0.7;
+                            el._py = this.parallaxY * depth * 0.7;
+                        }
+                        
+                        const finalSx = (el._jsx || 1) * audioScale;
+                        const finalSy = (el._jsy || 1) * audioScale;
+
+                        el.style.transform = `translate(${el._px}px, ${el._py}px) rotate(${rot}) scale(${finalSx}, ${finalSy})`;
+                        
+                        if(this.analyser && el.classList.contains('frame-neon')) {
+                            el.style.boxShadow = `0 0 ${15 + (bass/255)*40}px #ff00ff, inset 0 0 ${10 + (bass/255)*20}px #ff00ff`;
+                        }
+                    });
+
+                    requestAnimationFrame(loop);
+                };
+                requestAnimationFrame(loop);
+            },
+            // --- 追加処理ここまで ---
+
+            getPresetConfig() {
+                return {
+                    filter: { title: 'エフェクト', opts: ['filter-pinky', 'filter-deep', 'filter-dream', 'filter-midnight', 'filter-glitch', 'filter-none'], 
+                             names: ['桃酔', '淫夜', '白昼夢', '月蝕', '乱躁', 'OFF'] },
+                    frame: { title: 'フレーム', opts: ['frame-rose', 'frame-gold', 'frame-silk', 'frame-neon', 'frame-wood', 'frame-none'], 
+                             names: ['薔薇', '金細工', '緋絹', '淫光', '骨董', 'OFF'] },
+                    animIn: { title: 'インアニメ', opts: ['anim-in-kibin', 'anim-in-nettori', 'anim-in-shizuku', 'anim-in-fuwari', 'anim-in-zoom', 'none'], 
+                              names: ['機敏', 'ねっとり', '雫', 'ふわり', '迫り', 'OFF'] },
+                    animLoop: { title: 'ループアニメ', opts: ['anim-loop-yure', 'anim-loop-kodou', 'anim-loop-merome', 'anim-loop-fuwa', 'anim-loop-spin', 'none'], 
+                               names: ['揺らぎ', '鼓動', '目眩', '浮遊', '回転', 'OFF'] }
+                };
+            },
+
+            renderPresets(containerId, includeAnims, isSlideshow = false) {
+                const config = this.getPresetConfig();
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                const targetParams = isSlideshow ? this.slideParams : this.params;
+                
+                Object.keys(config).forEach(key => {
+                    if (!includeAnims && (key === 'animIn' || key === 'animLoop')) return;
+                    const group = config[key];
+                    const div = document.createElement('div');
+                    div.innerHTML = `<h3 class="text-[10px] text-pink-400 font-bold mb-3">${group.title}</h3>`;
+                    const grid = document.createElement('div');
+                    grid.className = 'grid grid-cols-2 gap-2';
+                    group.opts.forEach((opt, idx) => {
+                        const btn = document.createElement('button');
+                        btn.className = `btn-erotic h-9 text-[10px] rounded ${targetParams[key] === opt ? 'active' : ''}`;
+                        btn.innerText = group.names[idx];
+                        btn.onclick = () => {
+                            Array.from(grid.children).forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            targetParams[key] = opt;
+                            if(this.mode === 'SOLO' && !isSlideshow) this.applySoloChanges();
+                        };
+                        grid.appendChild(btn);
+                    });
+                    div.appendChild(grid);
+                    container.appendChild(div);
+                });
+            },
+
+            changeMode(m) {
+                if (this.mode !== 'SOLO') this.prevMode = this.mode;
+                if(this.mode === 'RANDOM' && m !== 'SOLO') this.togglePlay(false);
+                if(this.mode === 'SLIDESHOW' && m !== 'SOLO') this.toggleSlideshowPlay(false);
+                
+                this.mode = m;
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+                document.getElementById(`${m.toLowerCase()}-screen`).classList.add('visible');
+            },
+
+            togglePlay(force) {
+                this.isPlaying = (force !== undefined) ? force : !this.isPlaying;
+                const btn = document.getElementById('play-btn');
+                if (this.isPlaying) {
+                    if (this.images.length === 0) { this.isPlaying = false; return; }
+                    btn.innerText = "STOP"; 
+                    btn.classList.remove('text-green-400');
+                    btn.classList.add('text-red-500'); 
+                    btn.style.color = '#ef4444';
+                    btn.classList.add('active');
+                    this.startInterval();
+                } else {
+                    btn.innerText = "START"; 
+                    btn.classList.remove('text-red-500'); 
+                    btn.style.color = '';
+                    btn.classList.add('text-green-400'); 
+                    btn.classList.remove('active');
+                    clearInterval(this.intervalId);
+                }
+            },
+
+            startInterval() {
+                clearInterval(this.intervalId);
+                this.intervalId = setInterval(() => this.spawnImage(), this.params.interval);
+            },
+
+            updateCounter() {
+                const count = document.getElementById('random-canvas').children.length;
+                document.getElementById('canvas-counter').innerText = count.toString().padStart(4, '0');
+            },
+
+            spawnImage() {
+                if(this.images.length === 0) return;
+                const src = this.images[Math.floor(Math.random() * this.images.length)];
+                const isVideo = src.startsWith('data:video');
+                
+                const processMedia = (wOrig, hOrig, mediaEl) => {
+                    const aspect = wOrig / hOrig;
+                    const baseSize = Math.random() * (this.params.sizeMax - this.params.sizeMin) + this.params.sizeMin;
+                    let w, h;
+                    if(aspect >= 1) { w = baseSize; h = baseSize / aspect; }
+                    else { h = baseSize; w = baseSize * aspect; }
+
+                    const obj = document.createElement('div');
+                    obj.className = `art-object ${this.params.frame} ${this.params.filter}`;
+                    const x = Math.random() * (window.innerWidth - w);
+                    const y = Math.random() * (window.innerHeight - h);
+                    const rot = (Math.random() * 20) - 10;
+
+                    Object.assign(obj.style, {
+                        width: w + 'px', height: h + 'px', left: x + 'px', top: y + 'px',
+                        zIndex: this.zIndexCounter++, opacity: this.params.opacity / 100
+                    });
+                    
+                    if(!isVideo) {
+                        obj.style.backgroundImage = `url(${src})`;
+                    } else {
+                        mediaEl.style.width = '100%'; mediaEl.style.height = '100%'; 
+                        mediaEl.style.objectFit = 'cover'; mediaEl.style.pointerEvents = 'none';
+                        mediaEl.autoplay = true; mediaEl.loop = true; mediaEl.muted = true;
+                        obj.appendChild(mediaEl);
+                    }
+
+                    obj.style.setProperty('--rot', `${rot}deg`);
+                    obj.style.transform = `rotate(${rot}deg)`;
+
+                    if (this.params.animIn !== 'none') {
+                        obj.classList.add(this.params.animIn);
+                        obj.addEventListener('animationend', (e) => {
+                            if (e.animationName.startsWith('in')) obj.classList.add(this.params.animLoop);
+                        }, { once: true });
+                    } else {
+                        obj.classList.add(this.params.animLoop);
+                    }
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'ero-overlay';
+                    const p = this.params.eroDegree / 100;
+                    overlay.style.backgroundColor = `rgba(255, 20, 100, ${p})`;
+                    overlay.style.display = p > 0 ? 'block' : 'none';
+                    obj.appendChild(overlay);
+
+                    this.attachEvents(obj);
+                    document.getElementById('random-canvas').appendChild(obj);
+                    this.updateCounter();
+                    
+                    if(document.getElementById('random-canvas').children.length > 1000) {
+                        document.getElementById('random-canvas').firstChild.remove();
+                        this.updateCounter();
+                    }
+                };
+
+                if(isVideo) {
+                    const vid = document.createElement('video');
+                    vid.src = src;
+                    vid.onloadedmetadata = () => processMedia(vid.videoWidth, vid.videoHeight, vid);
+                } else {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = () => processMedia(img.width, img.height, null);
+                }
+            },
+
+            attachEvents(el) {
+                let lastTapTime = 0;
+                
+                el.addEventListener('pointerdown', (e) => {
+                    e.stopPropagation();
+                    
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTapTime;
+                    if (tapLength < 300 && tapLength > 0) {
+                        if(this.currentTool === 'PICK' || this.currentTool === 'SOLO') {
+                            this.enterSolo(el);
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                    lastTapTime = currentTime;
+
+                    if(this.currentTool === 'LOCK') { el.classList.toggle('locked'); return; }
+                    if(el.classList.contains('locked') && this.currentTool === 'POP') return;
+
+                    if(this.currentTool === 'POP') { this.burstEffect(el, e.clientX, e.clientY); return; }
+                    if(this.currentTool === 'SOLO') { this.enterSolo(el); return; }
+                    if(this.currentTool === 'PICK') this.startDrag(e, el);
+                });
+
+                // ピンチズーム対応 (Touch events)
+                let initialDistance = null;
+                let initialWidth = null;
+                let initialHeight = null;
+                let initialLeft = null;
+                let initialTop = null;
+
+                el.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 2 && this.currentTool === 'PICK') {
+                        initialDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                        initialWidth = parseFloat(el.style.width);
+                        initialHeight = parseFloat(el.style.height);
+                        initialLeft = parseFloat(el.style.left);
+                        initialTop = parseFloat(el.style.top);
+                    }
+                }, {passive: false});
+
+                el.addEventListener('touchmove', (e) => {
+                    if (e.touches.length === 2 && this.currentTool === 'PICK' && initialDistance) {
+                        e.preventDefault();
+                        const currentDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                        const scaleChange = currentDistance / initialDistance;
+                        
+                        const newWidth = initialWidth * scaleChange;
+                        const newHeight = initialHeight * scaleChange;
+                        const dx = (newWidth - initialWidth) / 2;
+                        const dy = (newHeight - initialHeight) / 2;
+                        
+                        el.style.width = newWidth + 'px';
+                        el.style.height = newHeight + 'px';
+                        el.style.left = (initialLeft - dx) + 'px';
+                        el.style.top = (initialTop - dy) + 'px';
+                    }
+                }, {passive: false});
+
+                el.addEventListener('touchend', (e) => {
+                    if (e.touches.length < 2) {
+                        initialDistance = null;
+                    }
+                });
+
+                el.addEventListener('wheel', (e) => {
+                    if(this.mode === 'SOLO') return;
+                    if(this.currentTool !== 'PICK') return;
+                    e.preventDefault();
+                    const scaleChange = e.deltaY < 0 ? 1.05 : 0.95;
+                    const rect = el.getBoundingClientRect();
+                    
+                    const w = parseFloat(el.style.width);
+                    const h = parseFloat(el.style.height);
+                    const newWidth = w * scaleChange;
+                    const newHeight = h * scaleChange;
+                    
+                    const dx = (newWidth - w) / 2;
+                    const dy = (newHeight - h) / 2;
+                    
+                    el.style.width = newWidth + 'px';
+                    el.style.height = newHeight + 'px';
+                    el.style.left = (parseFloat(el.style.left || rect.left) - dx) + 'px';
+                    el.style.top = (parseFloat(el.style.top || rect.top) - dy) + 'px';
+                }, {passive: false});
+            },
+
+            burstEffect(el, x, y) {
+                this.playPopSound(); 
+                const rect = el.getBoundingClientRect();
+                const src = el.style.backgroundImage !== '' ? el.style.backgroundImage : 'none';
+                
+                const b = document.createElement('div');
+                b.className = 'fixed pointer-events-none z-[10000] text-pink-500 text-3xl';
+                b.innerHTML = '<i class="fa-solid fa-heart-crack"></i>';
+                b.style.left = x+'px'; b.style.top = y+'px';
+                b.style.transform = 'translate(-50%, -50%)';
+                document.body.appendChild(b);
+                let s = 1, o = 1;
+                const heartAnim = setInterval(() => {
+                    s += 0.4; o -= 0.1;
+                    b.style.transform = `translate(-50%, -50%) scale(${s})`;
+                    b.style.opacity = o;
+                    if(o<=0) { clearInterval(heartAnim); b.remove(); }
+                }, 30);
+
+                if(src !== 'none') {
+                    const rows = 3, cols = 3;
+                    const sw = rect.width / cols;
+                    const sh = rect.height / rows;
+                    for(let r=0; r<rows; r++) {
+                        for(let c=0; c<cols; c++) {
+                            const frag = document.createElement('div');
+                            frag.className = 'shrapnel';
+                            Object.assign(frag.style, {
+                                width: sw + 'px', height: sh + 'px',
+                                left: (rect.left + c * sw) + 'px',
+                                top: (rect.top + r * sh) + 'px',
+                                backgroundImage: src,
+                                backgroundPosition: `${-c * sw}px ${-r * sh}px`,
+                                backgroundSize: `${rect.width}px ${rect.height}px`
+                            });
+                            const angle = Math.random() * Math.PI * 2;
+                            const dist = 100 + Math.random() * 200;
+                            frag.style.setProperty('--tw-x', Math.cos(angle) * dist + 'px');
+                            frag.style.setProperty('--tw-y', Math.sin(angle) * dist + 'px');
+                            frag.style.setProperty('--tw-r', (Math.random() * 360) + 'deg');
+                            document.body.appendChild(frag);
+                            setTimeout(() => frag.remove(), 800);
+                        }
+                    }
+                }
+
+                for(let i=0; i<10; i++){
+                    const p = document.createElement('div');
+                    p.className = 'particle w-2 h-2 bg-pink-400 rounded-full';
+                    const angle = (Math.PI * 2 / 10) * i;
+                    const dist = 60 + Math.random() * 60;
+                    p.style.left = x + 'px';
+                    p.style.top = y + 'px';
+                    p.style.setProperty('--tw-x', Math.cos(angle) * dist + 'px');
+                    p.style.setProperty('--tw-y', Math.sin(angle) * dist + 'px');
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 600);
+                }
+
+                el.remove();
+                this.updateCounter();
+            },
+
+            startDrag(e, el) {
+                const rect = el.getBoundingClientRect();
+                const offset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+                el.style.zIndex = 100000;
+                
+                const move = (ev) => { 
+                    const newLeft = ev.clientX - offset.x;
+                    const newTop = ev.clientY - offset.y;
+                    
+                    // ドラッグでの勢いを物理エンジンに伝えるための速度計算
+                    el._vx = newLeft - (parseFloat(el.style.left) || newLeft);
+                    el._vy = newTop - (parseFloat(el.style.top) || newTop);
+                    
+                    el.style.left = newLeft + 'px'; 
+                    el.style.top = newTop + 'px'; 
+                };
+                const up = () => { 
+                    el.style.zIndex = this.zIndexCounter++; 
+                    document.removeEventListener('pointermove', move); 
+                    document.removeEventListener('pointerup', up); 
+                    this.triggerJiggle(el); 
+                };
+                document.addEventListener('pointermove', move);
+                document.addEventListener('pointerup', up);
+            },
+
+            enterSolo(target) {
+                this.togglePlay(false);
+                this.soloTarget = target;
+                const canvasId = this.prevMode === 'RANDOM' ? 'random-canvas' : 'gallery-canvas';
+                Array.from(document.getElementById(canvasId).children).forEach(c => c.style.visibility = 'hidden');
+                target.style.visibility = 'visible';
+
+                const overlay = target.querySelector('.ero-overlay');
+                const currentEro = overlay ? (parseFloat(overlay.style.backgroundColor.split(',')[3]) * 100 || 0) : 0;
+                document.getElementById('solo-ero-input').value = currentEro;
+                document.getElementById('label-solo-ero').innerText = Math.round(currentEro) + '%';
+
+                this.changeMode('SOLO');
+                this.renderPresets('solo-presets', false, false);
+                this.soloZoom = 1;
+                const container = document.getElementById('solo-img-container');
+                container.innerHTML = '';
+                const clone = target.cloneNode(true);
+                clone.className = `art-object ${this.params.frame} ${this.params.filter}`;
+                Object.assign(clone.style, { position: 'relative', left: '0', top: '0', transform: 'none' });
+                container.appendChild(clone);
+                container.style.transform = 'scale(1)';
+            },
+
+            setSoloEro(v) {
+                if(!this.soloTarget) return;
+                const p = v / 100;
+                document.getElementById('label-solo-ero').innerText = v + '%';
+                const overlay = this.soloTarget.querySelector('.ero-overlay');
+                const cloneOverlay = document.getElementById('solo-img-container').firstChild.querySelector('.ero-overlay');
+                [overlay, cloneOverlay].forEach(o => {
+                    if (o) {
+                        o.style.backgroundColor = `rgba(255, 20, 100, ${p})`;
+                        o.style.display = p > 0 ? 'block' : 'none';
+                    }
+                });
+            },
+
+            applySoloChanges() {
+                if(!this.soloTarget) return;
+                const soloImg = document.getElementById('solo-img-container').firstChild;
+                const config = this.getPresetConfig();
+                Object.keys(config).forEach(k => {
+                    config[k].opts.forEach(opt => {
+                        soloImg.classList.remove(opt);
+                        this.soloTarget.classList.remove(opt);
+                    });
+                });
+                soloImg.classList.add(this.params.filter, this.params.frame);
+                this.soloTarget.classList.add(this.params.filter, this.params.frame);
+            },
+
+            exitSolo() {
+                const canvasId = this.prevMode === 'RANDOM' ? 'random-canvas' : 'gallery-canvas';
+                Array.from(document.getElementById(canvasId).children).forEach(c => c.style.visibility = 'visible');
+                this.changeMode(this.prevMode);
+            },
+
+            handleFiles(files) {
+                Array.from(files).forEach(f => {
+                    if(f.type.startsWith('audio/')) {
+                        this.initAudioReactive(f);
+                        return; 
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (e) => { 
+                        this.images.push(e.target.result); 
+                        this.addPalette(e.target.result); 
+                    };
+                    reader.readAsDataURL(f);
+                });
+            },
+
+            addPalette(src) {
+                const isVideo = src.startsWith('data:video');
+                const thumbnail = isVideo ? 'https://via.placeholder.com/70x70/2d0a15/ff4081?text=VIDEO' : `url(${src})`;
+
+                const createItem = (targetId, isGallery) => {
+                    const div = document.createElement('div');
+                    div.className = 'palette-item w-[70px] h-[70px] bg-cover bg-center shrink-0 border border-pink-900 rounded cursor-pointer';
+                    div.style.backgroundImage = thumbnail;
+                    
+                    if (isGallery) {
+                        div.classList.add('cursor-grab');
+                        div.addEventListener('pointerdown', (e) => {
+                            if(e.button === 2) return;
+                            const ghost = div.cloneNode(true);
+                            Object.assign(ghost.style, { position: 'fixed', zIndex: 10000, pointerEvents: 'none' });
+                            document.body.appendChild(ghost);
+                            const move = (ev) => { ghost.style.left = (ev.clientX - 35) + 'px'; ghost.style.top = (ev.clientY - 35) + 'px'; };
+                            const up = (ev) => {
+                                document.body.removeChild(ghost);
+                                const canvas = document.getElementById('gallery-canvas');
+                                const rect = canvas.getBoundingClientRect();
+                                if(ev.clientY < rect.bottom && ev.clientY > rect.top) this.spawnGalleryImg(src, ev.clientX, ev.clientY);
+                                document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up);
+                            };
+                            document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+                        });
+                    }
+                    div.oncontextmenu = (e) => { 
+                        e.preventDefault(); 
+                        if(confirm("パレットから削除しますか？")) {
+                            const idx = this.images.indexOf(src);
+                            if(idx > -1) this.images.splice(idx, 1);
+                            div.remove();
+                        }
+                    };
+                    document.getElementById(targetId).appendChild(div);
+                };
+
+                createItem('palette-list', true);
+                createItem('slideshow-palette-list', false);
+            },
+
+            spawnGalleryImg(src, x, y) {
+                const isVideo = src.startsWith('data:video');
+                const onLoad = (wOrig, hOrig, mediaEl) => {
+                    const aspect = wOrig / hOrig;
+                    const w = 300, h = 300 / aspect;
+                    const obj = document.createElement('div');
+                    obj.className = 'art-object frame-none filter-none';
+                    Object.assign(obj.style, { width: w+'px', height: h+'px', left: (x-w/2)+'px', top: (y-h/2)+'px', zIndex: this.zIndexCounter++ });
+                    
+                    if(!isVideo) {
+                        obj.style.backgroundImage = `url(${src})`;
+                    } else {
+                        mediaEl.style.width = '100%'; mediaEl.style.height = '100%'; 
+                        mediaEl.style.objectFit = 'cover'; mediaEl.style.pointerEvents = 'none';
+                        mediaEl.autoplay = true; mediaEl.loop = true; mediaEl.muted = true;
+                        obj.appendChild(mediaEl);
+                    }
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'ero-overlay'; overlay.style.display = 'none';
+                    obj.appendChild(overlay);
+                    
+                    let lastTapTime = 0;
+                    obj.addEventListener('pointerdown', (e) => {
+                        const currentTime = new Date().getTime();
+                        const tapLength = currentTime - lastTapTime;
+                        if (tapLength < 300 && tapLength > 0) {
+                            if(this.currentTool === 'PICK' || this.currentTool === 'SOLO') {
+                                this.enterSolo(obj);
+                                e.preventDefault();
+                                return;
+                            }
+                        }
+                        lastTapTime = currentTime;
+
+                        if(e.button!==2 && this.currentTool === 'PICK') this.startDrag(e, obj); 
+                    });
+
+                    // Pinch zoom
+                    let initialDistance = null;
+                    let initialWidth = null;
+                    let initialHeight = null;
+                    let initialLeft = null;
+                    let initialTop = null;
+
+                    obj.addEventListener('touchstart', (e) => {
+                        if (e.touches.length === 2 && this.currentTool === 'PICK') {
+                            initialDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                            initialWidth = parseFloat(obj.style.width);
+                            initialHeight = parseFloat(obj.style.height);
+                            initialLeft = parseFloat(obj.style.left);
+                            initialTop = parseFloat(obj.style.top);
+                        }
+                    }, {passive: false});
+
+                    obj.addEventListener('touchmove', (e) => {
+                        if (e.touches.length === 2 && this.currentTool === 'PICK' && initialDistance) {
+                            e.preventDefault();
+                            const currentDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                            const scaleChange = currentDistance / initialDistance;
+                            
+                            const newWidth = initialWidth * scaleChange;
+                            const newHeight = initialHeight * scaleChange;
+                            const dx = (newWidth - initialWidth) / 2;
+                            const dy = (newHeight - initialHeight) / 2;
+                            
+                            obj.style.width = newWidth + 'px';
+                            obj.style.height = newHeight + 'px';
+                            obj.style.left = (initialLeft - dx) + 'px';
+                            obj.style.top = (initialTop - dy) + 'px';
+                        }
+                    }, {passive: false});
+
+                    obj.addEventListener('touchend', (e) => {
+                        if (e.touches.length < 2) {
+                            initialDistance = null;
+                        }
+                    });
+
+                    obj.addEventListener('wheel', (e) => {
+                        if(this.currentTool !== 'PICK') return;
+                        e.preventDefault();
+                        const s = e.deltaY < 0 ? 1.05 : 0.95;
+                        const wStr = parseFloat(obj.style.width);
+                        const hStr = parseFloat(obj.style.height);
+                        const nw = wStr * s;
+                        const nh = hStr * s;
+                        const dx = (nw - wStr) / 2;
+                        const dy = (nh - hStr) / 2;
+                        obj.style.width = nw+'px'; obj.style.height = nh+'px';
+                        obj.style.left = (parseFloat(obj.style.left) - dx) + 'px';
+                        obj.style.top = (parseFloat(obj.style.top) - dy) + 'px';
+                    }, {passive: false});
+                    
+                    obj.oncontextmenu = (e) => { e.preventDefault(); obj.remove(); };
+                    document.getElementById('gallery-canvas').appendChild(obj);
+                }
+
+                if(isVideo) {
+                    const vid = document.createElement('video');
+                    vid.src = src;
+                    vid.onloadedmetadata = () => onLoad(vid.videoWidth, vid.videoHeight, vid);
+                } else {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = () => onLoad(img.width, img.height, null);
+                }
+            },
+
+            // --- Slideshow Logic ---
+            toggleSlideshowPlay(force) {
+                this.isSlidePlaying = (force !== undefined) ? force : !this.isSlidePlaying;
+                const btn = document.getElementById('slideshow-play-btn');
+                if (this.isSlidePlaying) {
+                    if (this.images.length === 0) { this.isSlidePlaying = false; return; }
+                    btn.innerText = "STOP"; 
+                    btn.classList.remove('text-green-400');
+                    btn.classList.add('text-red-500');
+                    btn.style.color = '#ef4444';
+                    btn.classList.add('active');
+                    this.startSlideshowInterval();
+                } else {
+                    btn.innerText = "START"; 
+                    btn.classList.remove('text-red-500');
+                    btn.style.color = '';
+                    btn.classList.add('text-green-400'); 
+                    btn.classList.remove('active');
+                    clearInterval(this.slideIntervalId);
+                }
+            },
+
+            startSlideshowInterval() {
+                clearInterval(this.slideIntervalId);
+                this.showNextSlide();
+                this.slideIntervalId = setInterval(() => this.showNextSlide(), this.slideParams.interval);
+            },
+
+            showNextSlide() {
+                if(this.images.length === 0) return;
+                const canvas = document.getElementById('slideshow-canvas');
+                canvas.innerHTML = '';
+                
+                if(this.slideIndex >= this.images.length) this.slideIndex = 0;
+                const src = this.images[this.slideIndex];
+                this.slideIndex = (this.slideIndex + 1) % this.images.length;
+                
+                const isVideo = src.startsWith('data:video');
+                const canvasRect = canvas.getBoundingClientRect();
+                
+                const onLoad = (wOrig, hOrig, mediaEl) => {
+                    const aspect = wOrig / hOrig;
+                    let w = canvasRect.width * 0.8;
+                    let h = w / aspect;
+                    if(h > canvasRect.height * 0.8) {
+                        h = canvasRect.height * 0.8;
+                        w = h * aspect;
+                    }
+
+                    const obj = document.createElement('div');
+                    obj.className = `art-object ${this.slideParams.frame} ${this.slideParams.filter}`;
+                    Object.assign(obj.style, {
+                        width: w + 'px', height: h + 'px',
+                        zIndex: 100, opacity: this.slideParams.opacity / 100,
+                        position: 'relative', left: 'auto', top: 'auto',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    });
+                    
+                    if(!isVideo) {
+                        obj.style.backgroundImage = `url(${src})`;
+                    } else {
+                        mediaEl.style.width = '100%'; mediaEl.style.height = '100%';
+                        mediaEl.style.objectFit = 'contain';
+                        mediaEl.autoplay = true; mediaEl.loop = true; mediaEl.muted = true;
+                        obj.appendChild(mediaEl);
+                    }
+
+                    obj.style.setProperty('--rot', '0deg');
+                    obj.style.transform = 'rotate(0deg)';
+
+                    if (this.slideParams.animIn !== 'none') {
+                        obj.classList.add(this.slideParams.animIn);
+                        obj.addEventListener('animationend', (e) => {
+                            if (e.animationName.startsWith('in')) obj.classList.add(this.slideParams.animLoop);
+                        }, { once: true });
+                    } else {
+                        obj.classList.add(this.slideParams.animLoop);
+                    }
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'ero-overlay';
+                    const p = this.slideParams.eroDegree / 100;
+                    overlay.style.backgroundColor = `rgba(255, 20, 100, ${p})`;
+                    overlay.style.display = p > 0 ? 'block' : 'none';
+                    obj.appendChild(overlay);
+
+                    canvas.appendChild(obj);
+                };
+
+                if(isVideo) {
+                    const vid = document.createElement('video');
+                    vid.src = src;
+                    vid.onloadedmetadata = () => onLoad(vid.videoWidth, vid.videoHeight, vid);
+                } else {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = () => onLoad(img.width, img.height, null);
+                }
+            },
+
+            setParam(k, v) {
+                this.params[k] = parseFloat(v);
+                let l = v;
+                if(k === 'interval') { l += 's'; this.params.interval = v*1000; if(this.isPlaying) this.startInterval(); }
+                if(k === 'opacity' || k === 'eroDegree') l += '%';
+                document.getElementById(`label-${k === 'eroDegree' ? 'ero' : k}`).innerText = l;
+            },
+
+            setSlideParam(k, v) {
+                this.slideParams[k] = parseFloat(v);
+                let l = v;
+                if(k === 'interval') { l += 's'; this.slideParams.interval = v*1000; if(this.isSlidePlaying) this.startSlideshowInterval(); }
+                if(k === 'opacity' || k === 'eroDegree') l += '%';
+                document.getElementById(`label-slide-${k === 'eroDegree' ? 'ero' : k}`).innerText = l;
+            },
+
+            updateSizeRange() {
+                const minEl = document.getElementById('size-min');
+                const maxEl = document.getElementById('size-max');
+                const minVal = parseInt(minEl.value);
+                const maxVal = parseInt(maxEl.value);
+                this.params.sizeMin = Math.min(minVal, maxVal);
+                this.params.sizeMax = Math.max(minVal, maxVal);
+                document.getElementById('label-size').innerText = `${this.params.sizeMin} - ${this.params.sizeMax}`;
+            },
+
+            toggleMenu() { document.getElementById('side-menu').classList.toggle('-translate-x-full'); },
+            toggleMenuSlideshow() { 
+                const menu = document.getElementById('slideshow-side-menu');
+                const controls = document.getElementById('slideshow-controls');
+                const isClosed = menu.classList.contains('-translate-x-full');
+                
+                if (isClosed) {
+                    menu.classList.remove('-translate-x-full');
+                    controls.style.transform = 'translateX(320px)';
+                } else {
+                    menu.classList.add('-translate-x-full');
+                    controls.style.transform = 'translateX(0)';
+                }
+            },
+            
+            togglePalette(modeName) {
+                const container = document.getElementById(`${modeName}-palette-container`);
+                const openBtn = document.getElementById(`${modeName}-palette-open`);
+                if (container.classList.contains('translate-y-full')) {
+                    container.classList.remove('translate-y-full');
+                    openBtn.classList.add('hidden');
+                } else {
+                    container.classList.add('translate-y-full');
+                    openBtn.classList.remove('hidden');
+                }
+            },
+
+            setTool(t) {
+                this.currentTool = t;
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
+                
+                ['random-canvas', 'gallery-canvas'].forEach(id => {
+                    const canvas = document.getElementById(id);
+                    if(canvas) {
+                        canvas.classList.remove('cursor-pop', 'cursor-pick', 'cursor-lock', 'cursor-solo');
+                        canvas.classList.add(`cursor-${t.toLowerCase()}`);
+                    }
+                });
+            },
+
+            toggleFullscreen() {
+                if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+                else document.exitFullscreen();
+            },
+
+            randomizeParams() {
+                document.querySelectorAll('#preset-groups button').forEach(b => { if(Math.random() > 0.8) b.click(); });
+            },
+
+            clearCanvas() {
+                document.getElementById('random-canvas').innerHTML = '';
+                this.updateCounter();
+            },
+
+            setupCoreEvents() {
+                const dropZone = document.getElementById('menu-upload');
+                dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('bg-pink-900/40'); });
+                dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-pink-900/40'));
+                dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('bg-pink-900/40'); this.handleFiles(e.dataTransfer.files); });
+
+                document.addEventListener('mousedown', (e) => {
+                    if(this.mode === 'RANDOM' && e.button === 1) {
+                        e.preventDefault();
+                        this.burstInterval = setInterval(() => {
+                            const el = document.elementFromPoint(this.mx, this.my);
+                            if(el && el.classList.contains('art-object') && !el.classList.contains('locked')) {
+                                this.burstEffect(el, this.mx, this.my);
+                            }
+                        }, 50);
+                    }
+                });
+                document.addEventListener('mouseup', (e) => { if(e.button === 1) clearInterval(this.burstInterval); });
+                document.addEventListener('mousemove', (e) => { this.mx = e.clientX; this.my = e.clientY; });
+
+                const soloViewport = document.getElementById('solo-viewport');
+                soloViewport.addEventListener('wheel', (e) => {
+                    if(this.mode !== 'SOLO') return;
+                    e.preventDefault();
+                    this.soloZoom = Math.max(0.1, this.soloZoom + (e.deltaY < 0 ? 0.1 : -0.1));
+                    document.getElementById('solo-img-container').style.transform = `scale(${this.soloZoom})`;
+                }, {passive: false});
+
+                // Solo mode touch pinch zoom
+                let soloInitialDist = null;
+                let soloInitialZoom = null;
+
+                soloViewport.addEventListener('touchstart', (e) => {
+                    if (this.mode === 'SOLO' && e.touches.length === 2) {
+                        soloInitialDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                        soloInitialZoom = this.soloZoom;
+                        e.preventDefault();
+                    }
+                }, {passive: false});
+
+                soloViewport.addEventListener('touchmove', (e) => {
+                    if (this.mode === 'SOLO' && e.touches.length === 2 && soloInitialDist) {
+                        e.preventDefault();
+                        const currentDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                        this.soloZoom = Math.max(0.1, soloInitialZoom * (currentDist / soloInitialDist));
+                        document.getElementById('solo-img-container').style.transform = `scale(${this.soloZoom})`;
+                    }
+                }, {passive: false});
+
+                soloViewport.addEventListener('touchend', (e) => {
+                    if (e.touches.length < 2) soloInitialDist = null;
+                });
+
+                // T Key Tool Toggle
+                document.addEventListener('keydown', (e) => {
+                    if(e.key.toLowerCase() === 't') {
+                        const tools = ['PICK', 'LOCK', 'POP', 'SOLO'];
+                        const idx = (tools.indexOf(this.currentTool) + 1) % tools.length;
+                        this.setTool(tools[idx]);
+                    }
+                });
             }
-            setTimeout(showResults, 5000);
-        } else {
-            showResults();
-        }
-    }
+        };
 
-    function showResults() {
-        document.getElementById('hud').classList.add('hidden');
-        document.getElementById('top-hud-layer').classList.add('hidden');
-        fcModal.classList.remove('active');
-        const screen = document.getElementById('result-screen');
-        screen.style.display = 'block';
-        document.getElementById('res-score').innerText = score.toLocaleString();
-        document.getElementById('res-miss').innerText = missCount;
-        const rank = score > 1500000 ? "SSS" : score > 800000 ? "S" : score > 400000 ? "A" : "B";
-        document.getElementById('final-rank').innerText = rank;
-        if (missCount === 0) document.getElementById('res-comment').innerText = "「凄かった...一滴ものこさず、全部受け止めたよ...♡」";
-        const tiles = document.getElementById('result-tile-container');
-        tiles.innerHTML = '';
-        for (let i = 0; i < 150; i++) {
-            const t = document.createElement('div');
-            t.className = 'res-tile';
-            t.style.backgroundImage = `url(${images[i % images.length].src})`;
-            tiles.appendChild(t);
-        }
-    }
-
-    function resumeGame() {
-        isPaused = false;
-        document.getElementById('pause-menu').style.display = 'none';
-        startMusic(pauseOffset);
-        requestAnimationFrame(gameLoop);
-    }
-
-    function restartGame() {
-        isPaused = false;
-        document.getElementById('pause-menu').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'none';
-        liquid.style.transition = "height 0.4s cubic-bezier(0.23, 1, 0.32, 1)";
-        initGame();
-    }
-
-    function goHome() { location.reload(); }
-
-    pauseBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (!gameActive || isPaused) return;
-        isPaused = true;
-        pauseOffset = audioCtx.currentTime - startTime;
-        if (musicSource) { try { musicSource.stop(); } catch(err){} }
-        document.getElementById('pause-menu').style.display = 'flex';
-    };
-
-    document.getElementById('resume-btn').onclick = resumeGame;
-    document.getElementById('restart-btn').onclick = restartGame;
-    document.getElementById('home-btn').onclick = goHome;
-
-    window.onkeydown = (e) => {
-        const mapping = { 'd': 0, 'f': 1, 'j': 2, 'k': 3 };
-        const lane = mapping[e.key.toLowerCase()];
-        if (lane !== undefined) handleInput(lane);
-    };
-
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.onresize = resize;
-    startBtn.onclick = initGame;
-</script>
+        window.onload = () => app.init();
+    </script>
 </body>
-
 </html>
